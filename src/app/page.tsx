@@ -10,10 +10,10 @@ import TransferTokens from "@/components/TransferTokens";
 import { useAccount } from "wagmi";
 import { Box, Stack, Heading, Text, Flex } from "@chakra-ui/react";
 import CheckBalance from "@/components/CheckBalance";
+import HandleTokenOperations from "@/components/HandleTokenOperations";
 
 export default function Home() {
   const { isConnected, address } = useAccount();
-
   return (
     <Box height="100%" minHeight="100dvh" p={6} bg="gray.50">
       <ConnectWallet />
@@ -31,6 +31,8 @@ export default function Home() {
             <TransferFromTokens />
             <MintTokens />
             <BurnTokens />
+
+            {address === process.env.NEXT_PUBLIC_CONTRACT_OWNER_ADDRESS && <HandleTokenOperations />}
           </Flex>
         </Stack>
       )}
