@@ -1,4 +1,4 @@
-
+export const DECIMALS = 18;
 export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS! as `0x${string}`;
 export const TOKEN_ABI = [
     {
@@ -211,7 +211,7 @@ export const TOKEN_ABI = [
                 "type": "uint256"
             }
         ],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
     },
     {

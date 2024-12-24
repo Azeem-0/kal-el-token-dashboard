@@ -11,6 +11,7 @@ import { useAccount } from "wagmi";
 import { Box, Stack, Heading, Text, Flex } from "@chakra-ui/react";
 import CheckBalance from "@/components/CheckBalance";
 import HandleTokenOperations from "@/components/HandleTokenOperations";
+import TokenAdminActions from "@/components/TokenAdminActions/TokenAdminActions";
 
 export default function Home() {
   const { isConnected, address } = useAccount();
@@ -32,7 +33,7 @@ export default function Home() {
             <MintTokens />
             <BurnTokens />
 
-            {address === process.env.NEXT_PUBLIC_CONTRACT_OWNER_ADDRESS && <HandleTokenOperations />}
+            {address === process.env.NEXT_PUBLIC_CONTRACT_OWNER_ADDRESS && <TokenAdminActions />}
           </Flex>
         </Stack>
       )}

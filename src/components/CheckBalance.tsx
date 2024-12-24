@@ -5,7 +5,7 @@ import client from '@/lib/viemClient';
 import { useAccount } from 'wagmi';
 import { Button } from './ui/button';
 import { toaster } from './ui/toaster';
-import getBalance from '@/services/getBalance';
+import { getBalance } from "@/services/tokenServices";
 
 const CheckBalance = () => {
 

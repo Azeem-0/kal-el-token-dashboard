@@ -94,7 +94,7 @@ import {
 } from "@chakra-ui/react";
 
 import { Toaster, toaster } from "@/components/ui/toaster";
-import getBalance from "@/services/getBalance";
+import { getBalance } from "@/services/tokenServices";
 
 const ConnectWallet = () => {
     const { connect, connectors } = useConnect();
@@ -106,8 +106,13 @@ const ConnectWallet = () => {
     const [balance, setBalance] = useState<string>("");
 
     const getCurrentBalance = async () => {
-        const result = await getBalance(address?.toString());
-        setBalance(result.toString());
+        try {
+            const result = await getBalance(address?.toString());
+            setBalance(result.toString());
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     useEffect(() => {
