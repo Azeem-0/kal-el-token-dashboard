@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KalEl Token Wallet Integration
 
-## Getting Started
+This is the frontend client for interacting with ERC-20 standard tokens. While it is currently configured to work with the Kal-El Token, it can be adapted to interact with any ERC-20 token by updating the environment variables.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Wallet Integration**: Connect your wallet to interact with the blockchain.
+- **Token Operations**:
+  - View token balance.
+  - Transfer tokens.
+  - Approve allowances.
+  - Check allowances.
+- **Owner Operations**:
+  - Mint and burn tokens.
+  - Pause and unpause token operations.
+  - Transfer ownership.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend Framework**: Next.js
+- **UI Library**: Chakra UI
+- **Blockchain Interaction**: wagmi, viem
+- **Styling**: Tailwind CSS (for additional customization)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Ensure you have the following installed:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Installation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Azeem-0/kal-el-token-wallet-integration.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd kal-el-token-wallet-integration
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Set up environment variables:
+
+   Create a `.env.local` file in the root directory and add the following:
+
+   ```env
+   NEXT_PUBLIC_CONTRACT_ADDRESS=<Your Contract Address>
+   NEXT_PUBLIC_INFURA_API_KEY=<Your Infura API Key>
+   ```
+
+5. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+6. Open your browser and navigate to:
+
+   ```plaintext
+   http://localhost:3000
+   ```
+
+## Usage
+
+### Wallet Connection
+- Click the "Connect Wallet" button to connect your Ethereum wallet.
+- Ensure you are on the correct network (e.g., Sepolia).
+
+### Token Operations
+- **View Balance**: Displays your current token balance.
+- **Transfer Tokens**: Transfer tokens to another address.
+- **Approve Allowance**: Approve a spender to use a specified amount of tokens.
+- **Check Allowance**: View the allowance for a specific spender.
+
+### Owner Operations
+- **Mint Tokens**: Add new tokens to the total supply.
+- **Burn Tokens**: Remove tokens from the total supply.
+- **Pause/Unpause**: Toggle the paused state of the token contract.
+- **Transfer Ownership**: Assign ownership of the contract to a new address.
+
