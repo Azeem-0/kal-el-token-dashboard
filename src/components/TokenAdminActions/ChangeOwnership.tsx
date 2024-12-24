@@ -2,26 +2,19 @@ import { useState } from "react";
 import { toaster } from "../ui/toaster";
 import { Box, Flex, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 import { Button } from "../ui/button";
-import { transferOwnership } from "@/services/tokenServices";
-import { useWriteContract } from "wagmi";
-import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
+import { useTokenOperations } from "@/hooks/useTokenOperations";
 
 export default function ChangeOwnership() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [newOwner, setNewOwner] = useState<string>("");
-    const { writeContract } = useWriteContract();
+
+    const { transferOwnership } = useTokenOperations();
 
     const changeOwnerShip = async () => {
         setIsLoading(true);
         try {
-            // await transferOwnership(newOwner);
-            await writeContract({
-                address: CONTRACT_ADDRESS,
-                abi: TOKEN_ABI,
-                functionName: 'transferOwnership',
-                args: [newOwner],
-            });
+            await transferOwnership(newOwner);
 
             toaster.create({
                 title: 'Token Paused',

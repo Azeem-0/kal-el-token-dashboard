@@ -1,25 +1,25 @@
-
+"use client";
 import { useState } from "react";
 import { Box, Input, Text, Spinner, Heading, Flex } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { useWaitForTransactionReceipt } from "wagmi";
-import { approveAllowance } from "@/services/tokenServices";
+import { useTokenOperations } from "@/hooks/useTokenOperations";
 
-const ApproveAllowance = () => {
-    const [spenderAddress, setSpenderAddress] = useState<string>("");
+const BurnTokens = () => {
+    const [fromAddress, setFromAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
-
     const [result, setResult] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { isLoading, isPending } = useWaitForTransactionReceipt();
+    const { isPending } = useWaitForTransactionReceipt();
+    const { burn } = useTokenOperations();
 
-    const approve = async () => {
-        if (spenderAddress.trim() === "" || !amount) {
+    const burnTokens = async () => {
+        if (fromAddress.trim() === "" || !amount) {
             toaster.create({
                 title: "Error",
-                description: "Both spender address and amount are required.",
+                description: "From address and amount are required.",
                 type: "info",
                 duration: 3000,
             });
@@ -29,30 +29,20 @@ const ApproveAllowance = () => {
         setLoading(true);
 
         try {
-            const result = await approveAllowance(spenderAddress, amount);
+            await burn(fromAddress, amount);
 
-            if (result) {
-                setResult(true);
-                toaster.create({
-                    title: "Success",
-                    description: `Allowance approved for ${spenderAddress} with amount ${amount}.`,
-                    type: "success",
-                    duration: 3000,
-                });
-            }
-            else {
-                toaster.create({
-                    title: "Error",
-                    description: "Failed to approve allowance. Please try again.",
-                    type: "error",
-                    duration: 3000,
-                });
-            }
+            setResult(true);
+            toaster.create({
+                title: "Success",
+                description: `Successfully burned ${amount} tokens from ${fromAddress}.`,
+                type: "success",
+                duration: 3000,
+            });
         } catch (error) {
-            console.error("Error approving allowance:", error);
+            console.error("Error burning tokens:", error);
             toaster.create({
                 title: "Error",
-                description: "Failed to approve allowance. Please try again.",
+                description: "Failed to burn tokens. Please try again.",
                 type: "error",
                 duration: 3000,
             });
@@ -73,14 +63,14 @@ const ApproveAllowance = () => {
             mt={6}
         >
             <Heading size="md" mb={4} color="gray.800">
-                Approve Allowance
+                Burn Tokens
             </Heading>
             <Flex direction="column" gap={4}>
                 <Input
                     color="black"
-                    placeholder="Enter spender address"
-                    value={spenderAddress}
-                    onChange={(e) => setSpenderAddress(e.target.value)}
+                    placeholder="Enter from address"
+                    value={fromAddress}
+                    onChange={(e) => setFromAddress(e.target.value)}
                     bg="gray.100"
                     borderColor="gray.300"
                     _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
@@ -98,21 +88,21 @@ const ApproveAllowance = () => {
                     _hover={{ borderColor: 'blue.400' }}
                 />
                 <Button
-                    bg="blue.600"
-                    colorScheme="blue"
-                    onClick={approve}
-                    // loading={isLoading || isPending}
-                    // loadingText="Approving"
+                    bg="red.600"
+                    colorScheme="red"
+                    onClick={burnTokens}
+                    // loading={isPending}
+                    loadingText="Burning"
                     mt={4}
-                    _hover={{ bg: 'blue.500' }}
-                    _active={{ bg: 'blue.700' }}
+                    _hover={{ bg: 'red.500' }}
+                    _active={{ bg: 'red.700' }}
                 >
-                    Approve Allowance
+                    Burn Tokens
                 </Button>
-                {isPending && <Spinner size="sm" mt={3} color="blue.500" />}
+                {isPending && <Spinner size="sm" mt={3} color="red.500" />}
                 {result && !isPending && (
-                    <Text color="green.500" mt={4}>
-                        Successfully approved allowance.
+                    <Text color="red.500" mt={4}>
+                        Successfully burned tokens.
                     </Text>
                 )}
             </Flex>
@@ -121,4 +111,4 @@ const ApproveAllowance = () => {
 
 };
 
-export default ApproveAllowance;
+export default BurnTokens;

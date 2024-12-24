@@ -1,82 +1,21 @@
-
-// import { useEffect, useState } from 'react';
-// import { createPublicClient, http } from 'viem';
-// import { CONTRACT_ADDRESS, TOKEN_ABI } from '../constants';
-// import { sepolia } from 'viem/chains';
-// import client from '@/lib/viemClient';
-// import { useAccount } from 'wagmi';
-
-// const CheckAllowance = () => {
-
-//     const { address } = useAccount();
-
-//     const [balance, setBalance] = useState<string>('0');
-//     const [loading, setLoading] = useState<boolean>(false);
-
-//     const [fromAddress, setFromAddress] = useState<string>("");
-//     const [toAddress, setToAddress] = useState<string>("");
-
-//     const checkAllowance = async () => {
-//         if (fromAddress.trim() === '' || toAddress.trim() === '') {
-//             alert("Enter from and to address");
-//             return;
-//         }
-
-//         try {
-//             const result: BigInt = await client.readContract({
-//                 address: CONTRACT_ADDRESS,
-//                 abi: TOKEN_ABI,
-//                 functionName: 'allowance',
-//                 args: [fromAddress, toAddress],
-//             }) as BigInt;
-
-//             setBalance(result.toString());
-
-//         } catch (error) {
-//             console.error('Error fetching balance:', error);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     if (loading) {
-//         return <p>Loading Allowance...</p>;
-//     }
-
-//     return (
-//         <div>
-//             <>
-//                 <h1>Check Allowance..</h1>
-
-//                 <input type="text" placeholder='Enter from address' onChange={(e) => setFromAddress(e.target.value)} />
-
-//                 <input type="text" placeholder='Enter to address' onChange={(e) => setToAddress(e.target.value)} />
-
-//                 <button onClick={checkAllowance}>Check</button>
-//             </>
-//             <p>{balance}</p>
-//         </div>
-//     );
-// };
-
-// export default CheckAllowance;
-
 import { useState } from "react";
-import client from "@/lib/viemClient";
-import { CONTRACT_ADDRESS, TOKEN_ABI } from "../constants";
 import { Box, Flex, Input, Text, Spinner, Heading } from "@chakra-ui/react";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { readContract } from "viem/actions";
+import { useTokenOperations } from "@/hooks/useTokenOperations";
+
+
 const CheckAllowance = () => {
-    const [allowance, setAllowance] = useState<string>("0");
     const [loading, setLoading] = useState<boolean>(false);
-    const [fromAddress, setFromAddress] = useState<string>("");
-    const [toAddress, setToAddress] = useState<string>("");
+    const [owner, setOwner] = useState<string>("");
+    const [spender, setSpender] = useState<string>("");
+    const [amount, setAmount] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
-    const checkAllowance = async () => {
-        if (fromAddress.trim() === "" || toAddress.trim() === "") {
+    const { checkAllowance } = useTokenOperations();
+
+    const allowance = async () => {
+        if (owner.trim() === "" || spender.trim() === "") {
             setError("Both from and to addresses are required.");
             toaster.create({
                 title: "Error",
@@ -90,16 +29,9 @@ const CheckAllowance = () => {
         setLoading(true);
 
         try {
-            const result: BigInt = await client.readContract({
-                address: CONTRACT_ADDRESS,
-                abi: TOKEN_ABI,
-                functionName: 'allowance',
-                args: [fromAddress, toAddress],
-            }) as BigInt;
+            const result = await checkAllowance(owner, spender);
 
-            console.log(result);
-
-            setAllowance(result.toString());
+            setAmount(result.toString());
 
             toaster.create({
                 title: "Allowance Checked",
@@ -138,8 +70,8 @@ const CheckAllowance = () => {
                 <Input
                     color="black"
                     placeholder="Enter from address"
-                    value={fromAddress}
-                    onChange={(e) => setFromAddress(e.target.value)}
+                    value={owner}
+                    onChange={(e) => setOwner(e.target.value)}
                     bg="gray.100"
                     borderColor="gray.300"
                     _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
@@ -148,8 +80,8 @@ const CheckAllowance = () => {
                 <Input
                     color="black"
                     placeholder="Enter to address"
-                    value={toAddress}
-                    onChange={(e) => setToAddress(e.target.value)}
+                    value={spender}
+                    onChange={(e) => setSpender(e.target.value)}
                     bg="gray.100"
                     borderColor="gray.300"
                     _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
@@ -163,7 +95,7 @@ const CheckAllowance = () => {
                 <Button
                     bg="blue.600"
                     colorScheme="blue"
-                    onClick={checkAllowance}
+                    onClick={allowance}
                     loading={loading}
                     loadingText="Checking..."
                     mt={4}
@@ -174,7 +106,7 @@ const CheckAllowance = () => {
                 </Button>
                 {loading && <Spinner size="sm" color="blue.500" mt={2} />}
                 <Text fontWeight="bold" mt={4} color="gray.700">
-                    Allowance: {allowance}
+                    Allowance: {amount}
                 </Text>
             </Flex>
         </Box>

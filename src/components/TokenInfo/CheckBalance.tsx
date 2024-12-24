@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, Text, Spinner, Heading, Flex, Input } from '@chakra-ui/react';
-import { CONTRACT_ADDRESS, TOKEN_ABI } from '../constants';
-import client from '@/lib/viemClient';
-import { useAccount } from 'wagmi';
-import { Button } from './ui/button';
-import { toaster } from './ui/toaster';
-import { getBalance } from "@/services/tokenServices";
+import { Button } from '../ui/button';
+import { toaster } from '../ui/toaster';
+import { useTokenOperations } from '@/hooks/useTokenOperations';
+
 
 const CheckBalance = () => {
 
     const [account, setAccount] = useState<string>("");
     const [balance, setBalance] = useState<string>('0');
     const [loading, setLoading] = useState<boolean>(true);
+
+    const { checkBalance } = useTokenOperations();
 
     const getCurrentBalance = async () => {
         if (account.trim() === '') {
@@ -24,7 +24,7 @@ const CheckBalance = () => {
             return;
         }
         try {
-            const result = await getBalance(account);
+            const result = await checkBalance(account);
             setBalance(result.toString());
             toaster.create({
                 title: "Sucess",

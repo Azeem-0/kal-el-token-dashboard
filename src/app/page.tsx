@@ -1,16 +1,15 @@
 "use client";
 
-import ApproveAllowance from "@/components/ApproveAllowance";
-import BurnTokens from "@/components/BurnTokens";
-import CheckAllowance from "@/components/CheckAllowance";
-import ConnectWallet from "@/components/ConnectWallet";
-import MintTokens from "@/components/MintTokens";
-import TransferFromTokens from "@/components/TransferFromTokens";
-import TransferTokens from "@/components/TransferTokens";
+import ApproveAllowance from "@/components/TokenTransactions/ApproveAllowance";
+import BurnTokens from "@/components/TokenAdminActions/BurnTokens";
+import CheckAllowance from "@/components/TokenInfo/CheckAllowance";
+import ConnectWallet from "@/components/TokenInfo/ConnectWallet";
+import MintTokens from "@/components/TokenAdminActions/MintTokens";
+import TransferFromTokens from "@/components/TokenTransactions/TransferFromTokens";
+import TransferTokens from "@/components/TokenTransactions/TransferTokens";
 import { useAccount } from "wagmi";
 import { Box, Stack, Heading, Text, Flex } from "@chakra-ui/react";
-import CheckBalance from "@/components/CheckBalance";
-import HandleTokenOperations from "@/components/HandleTokenOperations";
+import CheckBalance from "@/components/TokenInfo/CheckBalance";
 import TokenAdminActions from "@/components/TokenAdminActions/TokenAdminActions";
 
 export default function Home() {
@@ -32,6 +31,8 @@ export default function Home() {
             <TransferFromTokens />
             <MintTokens />
             <BurnTokens />
+
+            {/* should fetch the owner address from contract itself. */}
 
             {address === process.env.NEXT_PUBLIC_CONTRACT_OWNER_ADDRESS && <TokenAdminActions />}
           </Flex>

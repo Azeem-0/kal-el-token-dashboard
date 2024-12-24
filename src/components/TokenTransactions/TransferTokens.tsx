@@ -1,74 +1,21 @@
-
-// import { useState } from 'react';
-// import { CONTRACT_ADDRESS, TOKEN_ABI } from '../constants';
-// import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-
-// const TransferTokens = () => {
-
-//     const [result, setResult] = useState<boolean>(false);
-
-//     const { writeContract } = useWriteContract();
-
-//     const { isPending } = useWaitForTransactionReceipt();
-
-//     const [toAddress, setToAddress] = useState<string>("");
-//     const [amount, setAmount] = useState<Number>();
-
-//     const approveAllowance = async () => {
-//         if (toAddress.trim() === '') {
-//             alert("Enter to address");
-//             return;
-//         }
-
-//         try {
-//             await writeContract({
-//                 address: CONTRACT_ADDRESS,
-//                 abi: TOKEN_ABI,
-//                 functionName: 'transfer',
-//                 args: [toAddress, amount],
-//             });
-
-//             setResult(true);
-
-//         } catch (error) {
-//             console.error('Error fetching balance:', error);
-//         }
-//     };
-
-//     return (
-//         <div>
-//             <>
-//                 <h1>Approve Allowance..</h1>
-
-//                 <input type="text" placeholder='Enter to address' onChange={(e) => setToAddress(e.target.value)} />
-//                 <input type="number" placeholder='Enter amount' onChange={(e) => setAmount(Number.parseInt(e.target.value))} />
-
-//                 <button onClick={approveAllowance}>Transfer</button>
-//             </>
-
-//             <p>{(isPending && result) && "Transferring.."}</p>
-//             <p>{result && "Sucessfully transfered."}</p>
-//         </div>
-//     );
-// };
-
-// export default TransferTokens;
-
+"use client";
 import { useState } from "react";
 import { Box, Input, Text, Spinner, Heading, Flex } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { CONTRACT_ADDRESS, TOKEN_ABI } from "../constants";
+import { useWaitForTransactionReceipt } from "wagmi";
+import { useTokenOperations } from "@/hooks/useTokenOperations";
 
 const TransferTokens = () => {
     const [toAddress, setToAddress] = useState<string>("");
-    const [amount, setAmount] = useState<number | undefined>(undefined);
+    const [amount, setAmount] = useState<string>("");
     const [result, setResult] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { writeContract } = useWriteContract();
+
     const { isPending } = useWaitForTransactionReceipt();
+
+    const { transfer } = useTokenOperations();
 
     const transferTokens = async () => {
         if (toAddress.trim() === "" || !amount) {
@@ -84,12 +31,8 @@ const TransferTokens = () => {
         setLoading(true);
 
         try {
-            await writeContract({
-                address: CONTRACT_ADDRESS,
-                abi: TOKEN_ABI,
-                functionName: "transfer",
-                args: [toAddress, amount],
-            });
+
+            await transfer(toAddress, amount);
 
             setResult(true);
             toaster.create({
@@ -138,10 +81,10 @@ const TransferTokens = () => {
                 />
                 <Input
                     color="black"
-                    type="number"
+                    type="text"
                     placeholder="Enter amount"
                     value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
+                    onChange={(e) => setAmount(e.target.value)}
                     bg="gray.100"
                     borderColor="gray.300"
                     _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}

@@ -1,24 +1,18 @@
-import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 import { useState } from "react";
-import { useWriteContract } from "wagmi";
 import { toaster } from "../ui/toaster";
 import { Box, Spinner, Text } from "@chakra-ui/react";
 import { Button } from "../ui/button";
+import { useTokenOperations } from "@/hooks/useTokenOperations";
 
 export default function PauseTokenOperations() {
 
     const [isLoading, setIsLoading] = useState(false);
-    const { writeContract } = useWriteContract();
+    const { pause } = useTokenOperations();
 
     const handlePause = async () => {
         setIsLoading(true);
         try {
-            await writeContract({
-                address: CONTRACT_ADDRESS,
-                abi: TOKEN_ABI,
-                functionName: 'pause',
-                args: [],
-            });
+            await pause();
 
             toaster.create({
                 title: 'Token Paused',

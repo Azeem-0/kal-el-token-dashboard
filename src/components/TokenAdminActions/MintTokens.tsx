@@ -1,76 +1,22 @@
-
-// import { useState } from 'react';
-// import { CONTRACT_ADDRESS, TOKEN_ABI } from '../constants';
-// import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-
-// const MintTokens = () => {
-
-//     const [result, setResult] = useState<boolean>(false);
-
-//     const { writeContract } = useWriteContract();
-
-//     const { isPending } = useWaitForTransactionReceipt();
-
-//     const [toAddress, setToAddress] = useState<string>("");
-//     const [amount, setAmount] = useState<Number>();
-
-//     const mint = async () => {
-//         if (toAddress.trim() === '') {
-//             alert("Enter to address");
-//             return;
-//         }
-
-//         try {
-//             await writeContract({
-//                 address: CONTRACT_ADDRESS,
-//                 abi: TOKEN_ABI,
-//                 functionName: 'mint',
-//                 args: [toAddress, amount],
-//             });
-
-//             setResult(true);
-
-//         } catch (error) {
-//             console.error('Error fetching balance:', error);
-//         }
-//     };
-
-//     return (
-//         <div>
-//             <>
-//                 <h1>Mint Tokens..</h1>
-
-//                 <input type="text" placeholder='Enter to address' onChange={(e) => setToAddress(e.target.value)} />
-//                 <input type="number" placeholder='Enter amount' onChange={(e) => setAmount(Number.parseInt(e.target.value))} />
-
-//                 <button onClick={mint}>Mint</button>
-//             </>
-
-//             <p>{(isPending && result) && "minting.."}</p>
-//             <p>{result && "Sucessfully minted."}</p>
-//         </div>
-//     );
-// };
-
-// export default MintTokens;
-
+"use client";
 import { useState } from "react";
 import { Box, Input, Text, Spinner, Heading, Flex } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { CONTRACT_ADDRESS, TOKEN_ABI } from "../constants";
+import { useWaitForTransactionReceipt } from "wagmi";
+import { useTokenOperations } from "@/hooks/useTokenOperations";
 
 const MintTokens = () => {
     const [toAddress, setToAddress] = useState<string>("");
-    const [amount, setAmount] = useState<number | undefined>(undefined);
+    const [amount, setAmount] = useState<string>("");
     const [result, setResult] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { writeContract } = useWriteContract();
     const { isPending } = useWaitForTransactionReceipt();
 
-    const mint = async () => {
+    const { mint } = useTokenOperations();
+
+    const mintTokens = async () => {
         if (toAddress.trim() === "" || !amount) {
             toaster.create({
                 title: "Error",
@@ -84,13 +30,7 @@ const MintTokens = () => {
         setLoading(true);
 
         try {
-            await writeContract({
-                address: CONTRACT_ADDRESS,
-                abi: TOKEN_ABI,
-                functionName: "mint",
-                args: [toAddress, amount],
-            });
-
+            await mint(toAddress, amount);
             setResult(true);
             toaster.create({
                 title: "Success",
@@ -138,10 +78,10 @@ const MintTokens = () => {
                 />
                 <Input
                     color="black"
-                    type="number"
+                    type="text"
                     placeholder="Enter amount"
                     value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
+                    onChange={(e) => setAmount(e.target.value)}
                     bg="gray.100"
                     borderColor="gray.300"
                     _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
@@ -150,7 +90,7 @@ const MintTokens = () => {
                 <Button
                     bg="blue.600"
                     colorScheme="blue"
-                    onClick={mint}
+                    onClick={mintTokens}
                     // loading={isPending}
                     loadingText="Minting"
                     mt={4}
