@@ -109,7 +109,7 @@ const ConnectWallet = () => {
                     key={connector.uid}
                     connector={connector}
                     onClick={async () => {
-                        await connect({ connector, chainId });
+                        connect({ connector, chainId });
                         router.push('/');
                     }}
                 />
@@ -156,3 +156,39 @@ function ConnectButton({
     );
 }
 
+
+// const ConnectButton = ({
+//     connector,
+//     onClick,
+// }: {
+//     connector: Connector;
+//     onClick: () => void;
+// }) => {
+//     const [ready, setReady] = useState(false);
+
+//     useEffect(() => {
+//         (async () => {
+//             const provider = await connector.getProvider();
+//             setReady(!!provider);
+//         })();
+//     }, [connector]);
+
+//     return (
+//         <Button
+//             bg="blue.500"
+//             color="white"
+//             _hover={{ bg: "blue.600" }}
+//             _active={{ bg: "blue.700" }}
+//             _focus={{ boxShadow: "outline" }}
+//             mt={4}
+//             size="lg"
+//             borderRadius="md"
+//             w="full"
+//             disabled={!ready}
+//             onClick={onClick}
+//             variant="solid"
+//         >
+//             Connect {connector.name}
+//         </Button>
+//     );
+// };

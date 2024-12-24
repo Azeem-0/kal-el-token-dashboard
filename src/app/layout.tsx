@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import WagmiProviderWrapper from "@/providers/WagmiProvider";
-import { Provider } from "@/components/ui/provider";
 import { Toaster } from "@/components/ui/toaster";
+import Navigation from "@/components/navigation/Navigation";
+import { Provider } from "@/components/ui/provider";
 
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
       >
         <WagmiProviderWrapper>
           <Provider>
+            <Navigation />
             <Toaster />
             {children}
           </Provider>
