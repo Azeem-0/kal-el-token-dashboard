@@ -9,23 +9,20 @@ const CheckAllowance = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [owner, setOwner] = useState<string>("");
     const [spender, setSpender] = useState<string>("");
-    const [amount, setAmount] = useState<string>("");
-    const [error, setError] = useState<string | null>(null);
+    const [amount, setAmount] = useState<string>("0");
 
     const { checkAllowance } = useTokenOperations();
 
     const allowance = async () => {
         if (owner.trim() === "" || spender.trim() === "") {
-            setError("Both from and to addresses are required.");
             toaster.create({
-                title: "Error",
-                description: "Both from and to addresses are required.",
+                title: "Warning",
+                description: "Both owner and spender wallet address is required.",
                 type: "info",
             });
             return;
         }
 
-        setError(null);
         setLoading(true);
 
         try {
@@ -34,14 +31,12 @@ const CheckAllowance = () => {
             setAmount(result.toString());
 
             toaster.create({
-                title: "Allowance Checked",
-                description: `Allowance: ${result.toString()}`,
+                title: "Success",
+                description: "Checked allowance successfully.",
                 type: "success",
             });
-
         } catch (error) {
             console.error("Error fetching allowance:", error);
-            setError("Failed to fetch allowance. Please try again.");
             toaster.create({
                 title: "Error",
                 description: "Failed to fetch allowance. Please try again.",
@@ -87,11 +82,6 @@ const CheckAllowance = () => {
                     _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
                     _hover={{ borderColor: 'blue.400' }}
                 />
-                {error && (
-                    <Text color="red.500" fontSize="sm">
-                        {error}
-                    </Text>
-                )}
                 <Button
                     bg="blue.600"
                     colorScheme="blue"
@@ -104,9 +94,8 @@ const CheckAllowance = () => {
                 >
                     Check Allowance
                 </Button>
-                {loading && <Spinner size="sm" color="blue.500" mt={2} />}
-                <Text fontWeight="bold" mt={4} color="gray.700">
-                    Allowance: {amount}
+                <Text fontWeight="semibold" mt={4} color="gray.700">
+                    Allowance: {amount} KET
                 </Text>
             </Flex>
         </Box>

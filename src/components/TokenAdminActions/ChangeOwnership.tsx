@@ -1,36 +1,40 @@
 import { useState } from "react";
 import { toaster } from "../ui/toaster";
-import { Box, Flex, Heading, Input, Spinner, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Input } from "@chakra-ui/react";
 import { Button } from "../ui/button";
-import { useTokenOperations } from "@/hooks/useTokenOperations";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 
 export default function ChangeOwnership() {
 
-    const [isLoading, setIsLoading] = useState(false);
     const [newOwner, setNewOwner] = useState<string>("");
 
-    const { transferOwnership } = useTokenOperations();
+    const { writeContractAsync, isPending } = useWriteContract();
 
     const changeOwnerShip = async () => {
-        setIsLoading(true);
         try {
-            await transferOwnership(newOwner);
+            await writeContractAsync({
+                address: CONTRACT_ADDRESS,
+                abi: TOKEN_ABI,
+                functionName: 'transferOwnership',
+                args: [newOwner],
+            });
 
             toaster.create({
-                title: 'Token Paused',
-                description: 'The token has been paused successfully.',
+                title: 'Success',
+                description: 'Successfully changed ownership.',
                 type: 'success',
-                duration: 3000,
+                duration: 2000,
             });
+
         } catch (error) {
+            console.error(error);
             toaster.create({
                 title: 'Error',
                 description: 'Failed to tranfer ownership.',
                 type: 'error',
-                duration: 3000,
+                duration: 2000,
             });
-        } finally {
-            setIsLoading(false);
         }
     };
 
@@ -64,7 +68,7 @@ export default function ChangeOwnership() {
                     bg="blue.600"
                     colorScheme="blue"
                     onClick={changeOwnerShip}
-                    // loading={isPending}
+                    loading={isPending}
                     loadingText="Minting"
                     mt={4}
                     _hover={{ bg: 'blue.500' }}

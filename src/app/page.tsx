@@ -3,13 +3,14 @@
 import ApproveAllowance from "@/components/tokenTransactions/ApproveAllowance";
 import BurnTokens from "@/components/tokenAdminActions/BurnTokens";
 import CheckAllowance from "@/components/tokenInfo/CheckAllowance";
-import ConnectWallet from "@/components/tokenInfo/ConnectWallet";
+// import ConnectWallet from "@/components/tokenInfo/ConnectWallet";
 import MintTokens from "@/components/tokenAdminActions/MintTokens";
 import TransferFromTokens from "@/components/tokenTransactions/TransferFromTokens";
 import TransferTokens from "@/components/tokenTransactions/TransferTokens";
 import { useAccount } from "wagmi";
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import TokenAdminActions from "@/components/tokenAdminActions/TokenAdminActions";
+import CheckBalance from "@/components/tokenInfo/CheckBalance";
 
 export default function Home() {
 
@@ -19,7 +20,29 @@ export default function Home() {
     <Box height="100%" minHeight="100dvh" p={6} bg="gray.50">
       {isConnected &&
         <>
-          <TokenAdminActions />
+          {/* Get functions here */}
+          <Flex direction="row">
+            <CheckAllowance />
+            <CheckBalance />
+          </Flex>
+
+
+          {/* Token Write Operations */}
+
+          <Flex direction="row">
+            <TransferTokens />
+            <TransferFromTokens />
+            <ApproveAllowance />
+          </Flex>
+
+
+          {/* Owner only operations */}
+
+          <Flex direction="row">
+            <MintTokens />
+            <BurnTokens />
+            <TokenAdminActions />
+          </Flex>
         </>
       }
     </Box>

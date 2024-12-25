@@ -1,56 +1,53 @@
 
 import { useState } from "react";
-import { Box, Input, Text, Spinner, Heading, Flex } from "@chakra-ui/react";
+import { Box, Input, Heading, Flex } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWaitForTransactionReceipt } from "wagmi";
-import { useTokenOperations } from "@/hooks/useTokenOperations";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
+import { parseUnits } from "viem";
 
 const TransferFromTokens = () => {
     const [fromAddress, setFromAddress] = useState<string>("");
     const [toAddress, setToAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
-    const [result, setResult] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
 
-
-    const { isPending } = useWaitForTransactionReceipt();
-
-    const { transferFrom } = useTokenOperations();
+    const { isPending, writeContractAsync } = useWriteContract();
 
     const transferFromTokens = async () => {
         if (fromAddress.trim() === "" || toAddress.trim() === "" || !amount) {
             toaster.create({
-                title: "Error",
-                description: "From address, to address, and amount are required.",
+                title: "Warning",
+                description: "Please fill all the required fields.",
                 type: "info",
-                duration: 3000,
+                duration: 2000,
             });
             return;
         }
 
-        setLoading(true);
-
         try {
-            await transferFrom(fromAddress, toAddress, amount);
+            await writeContractAsync({
+                address: CONTRACT_ADDRESS,
+                abi: TOKEN_ABI,
+                functionName: "transferFrom",
+                args: [fromAddress, toAddress, parseUnits(amount, DECIMALS)],
+            });
 
-            setResult(true);
             toaster.create({
                 title: "Success",
-                description: `Tokens successfully transferred from ${fromAddress} to ${toAddress} with amount ${amount}.`,
+                description: "Successfully transfered tokens.",
                 type: "success",
-                duration: 3000,
+                duration: 2000,
             });
         } catch (error) {
             console.error("Error transferring tokens:", error);
+
             toaster.create({
                 title: "Error",
                 description: "Failed to transfer tokens. Please try again.",
                 type: "error",
-                duration: 3000,
+                duration: 2000,
             });
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -103,21 +100,16 @@ const TransferFromTokens = () => {
                 <Button
                     bg="blue.600"
                     colorScheme="blue"
+                    textAlign="center"
                     onClick={transferFromTokens}
-                    // loading={isPending}
-                    loadingText="Transferring"
+                    loading={isPending}
+                    loadingText="Transferring..."
                     mt={4}
                     _hover={{ bg: 'blue.500' }}
                     _active={{ bg: 'blue.700' }}
                 >
                     Transfer From Tokens
                 </Button>
-                {isPending && <Spinner size="sm" mt={3} color="blue.500" />}
-                {result && !isPending && (
-                    <Text color="green.500" mt={4}>
-                        Successfully transferred tokens.
-                    </Text>
-                )}
             </Flex>
         </Box>
     );

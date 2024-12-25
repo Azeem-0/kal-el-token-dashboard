@@ -1,25 +1,29 @@
-import { useState } from "react";
 import { toaster } from "../ui/toaster";
-import { Box, Spinner, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { Button } from "../ui/button";
-import { useTokenOperations } from "@/hooks/useTokenOperations";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 
 export default function PauseTokenOperations() {
 
-    const [isLoading, setIsLoading] = useState(false);
-    const { pause } = useTokenOperations();
+    const { isPending, writeContractAsync } = useWriteContract();
 
     const handlePause = async () => {
-        setIsLoading(true);
         try {
-            await pause();
+            await writeContractAsync({
+                address: CONTRACT_ADDRESS,
+                abi: TOKEN_ABI,
+                functionName: 'pause',
+                args: [],
+            });
 
             toaster.create({
-                title: 'Token Paused',
-                description: 'The token has been paused successfully.',
+                title: 'Success',
+                description: 'The token paused successfully.',
                 type: 'success',
                 duration: 3000,
             });
+
         } catch (error) {
             toaster.create({
                 title: 'Error',
@@ -27,8 +31,6 @@ export default function PauseTokenOperations() {
                 type: 'error',
                 duration: 3000,
             });
-        } finally {
-            setIsLoading(false);
         }
     };
 
@@ -51,7 +53,7 @@ export default function PauseTokenOperations() {
                 bg="red.600"
                 colorScheme="blue"
                 onClick={handlePause}
-                loading={isLoading}
+                loading={isPending}
                 loadingText="Pausing"
                 width="full"
                 _hover={{ bg: 'blue.500' }}
@@ -63,12 +65,6 @@ export default function PauseTokenOperations() {
             >
                 Pause Token
             </Button>
-            {isLoading && <Spinner size="sm" mt={3} color="blue.500" />}
-            {!isLoading && (
-                <Text color="blue.500" mt={2}>
-                    Successfully paused the token.
-                </Text>
-            )}
         </Box>
     );
 

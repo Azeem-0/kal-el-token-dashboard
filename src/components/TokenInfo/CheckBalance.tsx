@@ -9,28 +9,29 @@ const CheckBalance = () => {
 
     const [account, setAccount] = useState<string>("");
     const [balance, setBalance] = useState<string>('0');
-    const [loading, setLoading] = useState<boolean>(true);
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     const { checkBalance } = useTokenOperations();
 
     const getCurrentBalance = async () => {
         if (account.trim() === '') {
             toaster.create({
-                title: "Error",
-                description: "To address and amount are required.",
+                title: "Warning",
+                description: "Wallet address is required.",
                 type: "info",
                 duration: 3000,
             });
             return;
         }
+        setLoading(true);
         try {
             const result = await checkBalance(account);
             setBalance(result.toString());
             toaster.create({
-                title: "Sucess",
-                description: "Got the balance successfully.",
+                title: "Success",
+                description: "Checked Balance successfully.",
                 type: "success",
-                duration: 3000,
             });
         } catch (error) {
             toaster.create({
@@ -40,6 +41,8 @@ const CheckBalance = () => {
                 duration: 3000,
             });
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -72,18 +75,17 @@ const CheckBalance = () => {
                     bg="blue.600"
                     colorScheme="blue"
                     onClick={getCurrentBalance}
-                    // loading={isPending}
-                    loadingText="Minting"
+                    loading={loading}
+                    loadingText="Loading..."
                     mt={4}
                     _hover={{ bg: 'blue.500' }}
                     _active={{ bg: 'blue.700' }}
                 >
                     Check Balance
                 </Button>
-                {/* {isPending && <Spinner size="sm" mt={3} color="blue.500" />} */}
                 {balance && (
-                    <Text color="green.500" mt={4}>
-                        {balance}
+                    <Text fontWeight="semibold" mt={4} color="gray.700">
+                        Balance : {balance} KET
                     </Text>
                 )}
             </Flex>

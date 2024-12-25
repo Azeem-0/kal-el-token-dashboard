@@ -12,7 +12,7 @@ interface ButtonLoadingProps {
   loadingText?: React.ReactNode
 }
 
-export interface ButtonProps extends ChakraButtonProps, ButtonLoadingProps {}
+export interface ButtonProps extends ChakraButtonProps, ButtonLoadingProps { }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(props, ref) {
@@ -28,7 +28,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </>
         ) : loading && loadingText ? (
           <>
-            <Spinner size="inherit" color="inherit" />
             {loadingText}
           </>
         ) : (

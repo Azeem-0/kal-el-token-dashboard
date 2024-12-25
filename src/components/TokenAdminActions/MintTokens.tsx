@@ -1,20 +1,17 @@
 "use client";
 import { useState } from "react";
-import { Box, Input, Text, Spinner, Heading, Flex } from "@chakra-ui/react";
+import { Box, Input, Heading, Flex } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWaitForTransactionReceipt } from "wagmi";
-import { useTokenOperations } from "@/hooks/useTokenOperations";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
+import { parseUnits } from "viem";
 
 const MintTokens = () => {
     const [toAddress, setToAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
-    const [result, setResult] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
 
-    const { isPending } = useWaitForTransactionReceipt();
-
-    const { mint } = useTokenOperations();
+    const { isPending, writeContractAsync } = useWriteContract();
 
     const mintTokens = async () => {
         if (toAddress.trim() === "" || !amount) {
@@ -27,17 +24,22 @@ const MintTokens = () => {
             return;
         }
 
-        setLoading(true);
-
         try {
-            await mint(toAddress, amount);
-            setResult(true);
+            await writeContractAsync({
+                address: CONTRACT_ADDRESS,
+                abi: TOKEN_ABI,
+                functionName: "mint",
+                args: [toAddress, parseUnits(amount, DECIMALS)],
+            });
             toaster.create({
                 title: "Success",
-                description: `Successfully minted ${amount} tokens to ${toAddress}.`,
+                description: `Successfully minted tokens.`,
                 type: "success",
                 duration: 3000,
             });
+
+            setAmount("");
+            setToAddress("");
         } catch (error) {
             console.error("Error minting tokens:", error);
             toaster.create({
@@ -46,8 +48,6 @@ const MintTokens = () => {
                 type: "error",
                 duration: 3000,
             });
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -91,20 +91,14 @@ const MintTokens = () => {
                     bg="blue.600"
                     colorScheme="blue"
                     onClick={mintTokens}
-                    // loading={isPending}
-                    loadingText="Minting"
+                    loading={isPending}
+                    loadingText="Minting..."
                     mt={4}
                     _hover={{ bg: 'blue.500' }}
                     _active={{ bg: 'blue.700' }}
                 >
                     Mint Tokens
                 </Button>
-                {isPending && <Spinner size="sm" mt={3} color="blue.500" />}
-                {result && !isPending && (
-                    <Text color="green.500" mt={4}>
-                        Successfully minted tokens.
-                    </Text>
-                )}
             </Flex>
         </Box>
     );

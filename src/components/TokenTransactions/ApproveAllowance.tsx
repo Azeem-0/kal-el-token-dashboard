@@ -1,66 +1,52 @@
 
 import { useState } from "react";
-import { Box, Input, Text, Spinner, Heading, Flex } from "@chakra-ui/react";
+import { Box, Input, Heading, Flex } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWaitForTransactionReceipt } from "wagmi";
-import { useTokenOperations } from "@/hooks/useTokenOperations";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
+import { parseUnits } from "viem";
 
 
 const ApproveAllowance = () => {
     const [spender, setSpender] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
 
-    const [result, setResult] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const { isLoading, isPending } = useWaitForTransactionReceipt();
-
-    const { approveAllowance } = useTokenOperations();
+    const { isPending, writeContractAsync } = useWriteContract();
 
     const approve = async () => {
         if (spender.trim() === "" || !amount) {
             toaster.create({
-                title: "Error",
+                title: "Warning",
                 description: "Both spender address and amount are required.",
                 type: "info",
-                duration: 3000,
+                duration: 2000,
             });
             return;
         }
 
-        setLoading(true);
-
         try {
-            const result = await approveAllowance(spender, amount);
+            await writeContractAsync({
+                address: CONTRACT_ADDRESS,
+                abi: TOKEN_ABI,
+                functionName: "approve",
+                args: [spender, parseUnits(amount, DECIMALS)],
+            });
 
-            if (result) {
-                setResult(true);
-                toaster.create({
-                    title: "Success",
-                    description: `Allowance approved for ${spender} with amount ${amount}.`,
-                    type: "success",
-                    duration: 3000,
-                });
-            }
-            else {
-                toaster.create({
-                    title: "Error",
-                    description: "Failed to approve allowance. Please try again.",
-                    type: "error",
-                    duration: 3000,
-                });
-            }
+            toaster.create({
+                title: "Success",
+                description: "Allowance approved",
+                type: "success",
+                duration: 2000,
+            });
         } catch (error) {
             console.error("Error approving allowance:", error);
             toaster.create({
                 title: "Error",
                 description: "Failed to approve allowance. Please try again.",
                 type: "error",
-                duration: 3000,
+                duration: 2000,
             });
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -104,20 +90,14 @@ const ApproveAllowance = () => {
                     bg="blue.600"
                     colorScheme="blue"
                     onClick={approve}
-                    // loading={isLoading || isPending}
-                    // loadingText="Approving"
+                    loading={isPending}
+                    loadingText="Approving..."
                     mt={4}
                     _hover={{ bg: 'blue.500' }}
                     _active={{ bg: 'blue.700' }}
                 >
                     Approve Allowance
                 </Button>
-                {isPending && <Spinner size="sm" mt={3} color="blue.500" />}
-                {result && !isPending && (
-                    <Text color="green.500" mt={4}>
-                        Successfully approved allowance.
-                    </Text>
-                )}
             </Flex>
         </Box>
     );

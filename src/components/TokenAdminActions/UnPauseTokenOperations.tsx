@@ -1,33 +1,35 @@
-import { useState } from "react";
 import { toaster } from "../ui/toaster";
-import { Box, Spinner, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { Button } from "../ui/button";
-import { useTokenOperations } from "@/hooks/useTokenOperations";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 
 export default function UnPauseTokenOperations() {
-    const [isLoading, setIsLoading] = useState(false);
 
-    const { unpause } = useTokenOperations();
+    const { isPending, writeContractAsync } = useWriteContract();
 
     const handleUnpause = async () => {
-        setIsLoading(true);
         try {
-            await unpause();
+            await writeContractAsync({
+                address: CONTRACT_ADDRESS,
+                abi: TOKEN_ABI,
+                functionName: 'unpause',
+                args: [],
+            });
+
             toaster.create({
                 title: 'Token Unpaused',
-                description: 'The token has been unpaused successfully.',
+                description: 'The token unpaused successfully.',
                 type: 'success',
-                duration: 3000,
+                duration: 2000,
             });
         } catch (error) {
             toaster.create({
                 title: 'Error',
                 description: 'Failed to unpause the token.',
                 type: 'error',
-                duration: 3000,
+                duration: 2000,
             });
-        } finally {
-            setIsLoading(false);
         }
     };
 
@@ -50,7 +52,7 @@ export default function UnPauseTokenOperations() {
                 bg="blue.600"
                 colorScheme="blue"
                 onClick={handleUnpause}
-                loading={isLoading}
+                loading={isPending}
                 loadingText="Unpausing"
                 width="full"
                 _hover={{ bg: 'blue.500' }}
@@ -62,12 +64,6 @@ export default function UnPauseTokenOperations() {
             >
                 Unpause Token
             </Button>
-            {isLoading && <Spinner size="sm" mt={2} color="blue.500" />}
-            {!isLoading && (
-                <Text color="blue.500" mt={3}>
-                    Successfully unpaused the token.
-                </Text>
-            )}
         </Box>
     );
 
