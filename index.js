@@ -1,6 +1,6 @@
 // const { ethers } = require("ethers");
 
-// const privateKey = "3111c791a57a89bca73930b5670139cf3d42613f569e159ec94708188204d44d"; // Replace with your private key
+// const privateKey = "cVcQD3zM7buDwAviQemPcfQ6myDNhjJrXiMn8Dw56L5f52xfer9R"; // Replace with your private key
 
 // // Create a wallet instance from the private key
 // const wallet = new ethers.Wallet(privateKey);
