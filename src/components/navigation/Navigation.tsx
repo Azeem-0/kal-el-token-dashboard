@@ -1,7 +1,6 @@
 "use client";
 
-import { Box, Flex, Link, Spacer } from "@chakra-ui/react";
-import { Button } from "@/components/ui/button";
+import { Box, Flex, Spacer } from "@chakra-ui/react";
 import ConnectionDrawer from "./ConnectionDrawer";
 import { useAccount } from "wagmi";
 import WalletConnected from "./WalletConnected";

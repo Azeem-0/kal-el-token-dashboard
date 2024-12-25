@@ -39,21 +39,19 @@ const ConnectionDrawer = () => {
             <DrawerTrigger asChild>
                 <Button
                     _hover={{
-                        boxShadow: "0px 4px 8px rgba(0, 0.2, 0, 0.1)",
                         bg: "#D6D6DB",
                     }}
                     onClick={() => {
                         setIsDrawerOpen(true);
                     }}
-                    className="bg-[#d8d8d9] font-normal rounded-full hover:-translate-y-[2px] hover:bg-[#D6D6DB]"
+                    className="bg-[#E7E7E7] font-semibold rounded-full"
                     colorScheme="teal"
                     size="sm"
-                    borderRadius="md"
                     variant="outline"
-                    fontSize="xs"
-                    padding='1'
+                    fontSize="sm"
+                    padding='2'
                     height="fit-content"
-                    paddingX="3"
+                    paddingX="8"
                     color="black"
                 >
                     Connect
@@ -82,13 +80,17 @@ const ConnectionDrawer = () => {
 
                 <DrawerFooter>
                     <DrawerActionTrigger asChild>
-                        <Button variant="outline" color="gray.800">
+                        <Button onClick={() => {
+                            setIsDrawerOpen(false);
+                        }} variant="outline" color="gray.800">
                             Close
                         </Button>
                     </DrawerActionTrigger>
                 </DrawerFooter>
 
-                <DrawerCloseTrigger color="black" />
+                <DrawerCloseTrigger onClick={() => {
+                    setIsDrawerOpen(false);
+                }} color="black" />
             </DrawerContent>
         </DrawerRoot >
     );

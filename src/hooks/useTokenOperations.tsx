@@ -24,6 +24,21 @@ export const useTokenOperations = () => {
         }
     };
 
+    const getOwner = async () => {
+        try {
+            const result: string = await client.readContract({
+                address: CONTRACT_ADDRESS,
+                abi: TOKEN_ABI,
+                functionName: "getOwner",
+                args: [],
+            }) as string;
+
+            return result;
+        } catch (error) {
+            console.error("Error fetching balance:", error);
+            return "null";
+        }
+    }
     const approveAllowance = async (spenderAddress: string, amount: string) => {
         if (!spenderAddress) return false;
 
@@ -158,5 +173,5 @@ export const useTokenOperations = () => {
             throw error;
         }
     }
-    return { pause, unpause, mint, burn, transferFrom, transfer, checkBalance, approveAllowance, transferOwnership, checkAllowance };
+    return { getOwner, pause, unpause, mint, burn, transferFrom, transfer, checkBalance, approveAllowance, transferOwnership, checkAllowance };
 };

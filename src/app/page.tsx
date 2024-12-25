@@ -8,14 +8,20 @@ import MintTokens from "@/components/tokenAdminActions/MintTokens";
 import TransferFromTokens from "@/components/tokenTransactions/TransferFromTokens";
 import TransferTokens from "@/components/tokenTransactions/TransferTokens";
 import { useAccount } from "wagmi";
-import { Box, Stack, Heading, Text, Flex } from "@chakra-ui/react";
-import CheckBalance from "@/components/tokenInfo/CheckBalance";
+import { Box } from "@chakra-ui/react";
 import TokenAdminActions from "@/components/tokenAdminActions/TokenAdminActions";
 
 export default function Home() {
-  const { isConnected, address } = useAccount();
+
+  const { isConnected } = useAccount();
+
   return (
     <Box height="100%" minHeight="100dvh" p={6} bg="gray.50">
+      {isConnected &&
+        <>
+          <TokenAdminActions />
+        </>
+      }
     </Box>
   );
 
@@ -41,7 +47,3 @@ export default function Home() {
           </Flex>
         </Stack>
       )} */}
-
-{/* should fetch the owner address from contract itself. */ }
-
-{/* {address === process.env.NEXT_PUBLIC_CONTRACT_OWNER_ADDRESS && <TokenAdminActions />} */ }

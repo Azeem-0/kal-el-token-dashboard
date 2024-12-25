@@ -1,9 +1,8 @@
-import { Button, Text, Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 import { useAccount, useDisconnect } from "wagmi";
 import {
     ClipboardIconButton,
     ClipboardInput,
-    ClipboardLabel,
     ClipboardRoot,
 } from "@/components/ui/clipboard";
 import { InputGroup } from "@/components/ui/input-group";
@@ -26,7 +25,6 @@ export default function WalletConnected() {
             </ClipboardRoot>
 
             <Button
-                borderRadius="md"
                 onClick={() => {
                     disconnect();
                     toaster.create({
@@ -34,20 +32,19 @@ export default function WalletConnected() {
                         type: "info"
                     });
                 }}
+                bg="red.500"
+                height="fit-content"
+                color="white"
                 _hover={{
-                    boxShadow: "0px 4px 8px rgba(0, 0.2, 0, 0.1)",
                     bg: "red.600",
                 }}
-                className="font-normal px-5 py-2 rounded-full hover:-translate-y-[2px]"
+                className=" font-semibold rounded-full"
                 colorScheme="teal"
                 size="sm"
                 variant="outline"
-                fontSize="xs"
-                bg="red.500"
-                padding='1'
-                height="fit-content"
-                paddingX="3"
-                color="white"
+                fontSize="sm"
+                padding='2'
+                paddingX="8"
             >
                 Disconnect
             </Button>
