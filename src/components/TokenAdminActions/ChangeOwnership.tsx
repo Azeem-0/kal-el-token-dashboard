@@ -9,14 +9,22 @@ export default function ChangeOwnership() {
 
     const [newOwner, setNewOwner] = useState<string>("");
 
-    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContract, isError, error } = useWriteContract();
 
-    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    const { isLoading: isConfirming, isSuccess: ifConfirmed } = useWaitForTransactionReceipt({
         hash,
     });
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isError) {
+            toaster.create({
+                title: "Error",
+                description: `${error?.cause}`,
+                type: "error",
+                duration: 2000,
+            });
+        }
+        if (ifConfirmed) {
             toaster.create({
                 title: 'Success',
                 description: 'Successfully changed ownership.',
@@ -25,13 +33,13 @@ export default function ChangeOwnership() {
             });
             setNewOwner("");
         }
-    }, [isSuccess]);
+    }, [ifConfirmed, isError]);
 
     const loading = isPending || isConfirming;
 
     const changeOwnerShip = async () => {
         try {
-            await writeContractAsync({
+            await writeContract({
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: 'transferOwnership',

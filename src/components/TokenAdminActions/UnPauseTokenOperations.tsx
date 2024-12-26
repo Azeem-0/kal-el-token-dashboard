@@ -7,14 +7,22 @@ import { useEffect } from "react";
 
 export default function UnPauseTokenOperations() {
 
-    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContract, isError, error } = useWriteContract();
 
-    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
         hash,
     });
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isError) {
+            toaster.create({
+                title: "Error",
+                description: `${error?.cause}`,
+                type: "error",
+                duration: 2000,
+            });
+        }
+        if (isConfirmed) {
             toaster.create({
                 title: 'Token Unpaused',
                 description: 'The token unpaused successfully.',
@@ -22,13 +30,13 @@ export default function UnPauseTokenOperations() {
                 duration: 2000,
             });
         }
-    }, [isSuccess]);
+    }, [isConfirmed]);
 
     const loading = isPending || isConfirming;
 
     const handleUnpause = async () => {
         try {
-            await writeContractAsync({
+            await writeContract({
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: 'unpause',

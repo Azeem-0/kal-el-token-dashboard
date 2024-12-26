@@ -6,30 +6,47 @@ import { Button } from "@/components/ui/button";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import { parseUnits } from "viem";
+import { trimErrorMessage } from "@/utils/trimErrorMessage";
 
 const TransferTokens = () => {
     const [toAddress, setToAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
 
 
-    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContract, isError, error } = useWriteContract();
 
-    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
         hash,
     });
 
     useEffect(() => {
-        if (isSuccess) {
+
+        if (isError) {
+            toaster.create({
+                title: "Error",
+                description: `${error?.cause}`,
+                type: "error",
+                duration: 2000,
+            });
+        }
+
+        if (isConfirmed) {
             toaster.create({
                 title: "Success",
-                description: "Successfully transfered tokens.",
+                description: "Successfully transferred tokens.",
                 type: "success",
                 duration: 2000,
             });
-            setToAddress("");
-            setAmount("");
+
+            setTimeout(() => {
+                setToAddress("");
+                setAmount("");
+            }, 1000);
         }
-    }, [isSuccess]);
+
+
+    }, [isConfirmed, isError]);
+
 
     const loading = isPending || isConfirming;
 
@@ -44,7 +61,7 @@ const TransferTokens = () => {
             return;
         }
         try {
-            await writeContractAsync({
+            await writeContract({
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "transfer",

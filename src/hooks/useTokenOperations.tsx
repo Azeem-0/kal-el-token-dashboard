@@ -14,6 +14,7 @@ export const useTokenOperations = () => {
                 abi: TOKEN_ABI,
                 functionName: 'balanceOf',
                 args: [address],
+                blockTag: "latest",
             }) as bigint;
 
             return formatUnits(result, DECIMALS);
@@ -29,6 +30,7 @@ export const useTokenOperations = () => {
                 abi: TOKEN_ABI,
                 functionName: 'allowance',
                 args: [owner, spender],
+                blockTag: "latest",
             }) as bigint;
 
             return formatUnits(result, DECIMALS);
@@ -44,6 +46,7 @@ export const useTokenOperations = () => {
                 abi: TOKEN_ABI,
                 functionName: "getOwner",
                 args: [],
+                blockTag: "latest",
             }) as string;
 
             return result;
@@ -59,7 +62,8 @@ export const useTokenOperations = () => {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "name",
-                args: []
+                args: [],
+                blockTag: "latest",
             }) as string;
 
             return result;
@@ -74,7 +78,8 @@ export const useTokenOperations = () => {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "getTotalSupply",
-                args: []
+                args: [],
+                blockTag: "latest",
             }) as bigint;
 
             return formatUnits(result, DECIMALS);
@@ -89,7 +94,8 @@ export const useTokenOperations = () => {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "symbol",
-                args: []
+                args: [],
+                blockTag: "latest",
             }) as string;
 
             return result;
@@ -104,7 +110,8 @@ export const useTokenOperations = () => {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "getDecimals",
-                args: []
+                args: [],
+                blockTag: "latest",
             }) as string;
 
             return result;
@@ -119,7 +126,8 @@ export const useTokenOperations = () => {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "status",
-                args: []
+                args: [],
+                blockTag: "latest",
             }) as boolean;
 
             return result;

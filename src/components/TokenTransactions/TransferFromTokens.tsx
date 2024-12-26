@@ -12,25 +12,40 @@ const TransferFromTokens = () => {
     const [toAddress, setToAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
 
-    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContract, isError, error } = useWriteContract();
 
-    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
         hash,
     });
 
     useEffect(() => {
-        if (isSuccess) {
+
+        if (isError) {
+            toaster.create({
+                title: "Error",
+                description: `${error?.cause}`,
+                type: "error",
+                duration: 2000,
+            });
+        }
+
+        if (isConfirmed) {
             toaster.create({
                 title: "Success",
                 description: "Successfully transfered tokens.",
                 type: "success",
                 duration: 2000,
             });
-            setFromAddress("");
-            setToAddress("");
-            setAmount("");
+
+            setTimeout(() => {
+                setFromAddress("");
+                setToAddress("");
+                setAmount("");
+            }, 1000);
         }
-    }, [isSuccess]);
+
+
+    }, [isConfirmed, isError]);
 
     const loading = isPending || isConfirming;
 
@@ -46,7 +61,7 @@ const TransferFromTokens = () => {
         }
 
         try {
-            await writeContractAsync({
+            await writeContract({
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "transferFrom",

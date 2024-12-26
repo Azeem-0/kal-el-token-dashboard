@@ -1,11 +1,14 @@
 "use client";
-import { createConfig, http } from 'wagmi'
-import { sepolia, mainnet } from 'wagmi/chains'
+import { cookieStorage, createConfig, createStorage, http } from 'wagmi'
+import { sepolia } from 'wagmi/chains';
 
 export const wagmiConfig = createConfig({
-    chains: [mainnet, sepolia],
+    chains: [sepolia],
     transports: {
-        [mainnet.id]: http(),
         [sepolia.id]: http(),
     },
+    ssr: true,
+    storage: createStorage({
+        storage: cookieStorage,
+    }),
 })

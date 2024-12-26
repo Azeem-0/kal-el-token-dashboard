@@ -29,16 +29,7 @@ const CheckAllowance = () => {
         setLoading(true);
 
         try {
-            // const result = await checkAllowance(owner, spender);
-
-            const result: bigint = await readContract(client, {
-                address: CONTRACT_ADDRESS,
-                abi: TOKEN_ABI,
-                functionName: 'allowance',
-                args: [owner, spender],
-            }) as bigint;
-
-            console.log(result, owner, spender);
+            const result = await checkAllowance(owner, spender);
 
             setAmount(result.toString());
 
