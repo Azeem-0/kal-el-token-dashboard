@@ -1,12 +1,30 @@
 import { toaster } from "../ui/toaster";
 import { Box, Text } from "@chakra-ui/react";
 import { Button } from "../ui/button";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
+import { useEffect } from "react";
 
 export default function PauseTokenOperations() {
 
-    const { isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+
+    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+        hash,
+    });
+
+    useEffect(() => {
+        if (isSuccess) {
+            toaster.create({
+                title: 'Success',
+                description: 'The token paused successfully.',
+                type: 'success',
+                duration: 3000,
+            });
+        }
+    }, [isSuccess]);
+
+    const loading = isPending || isConfirming;
 
     const handlePause = async () => {
         try {
@@ -17,12 +35,7 @@ export default function PauseTokenOperations() {
                 args: [],
             });
 
-            toaster.create({
-                title: 'Success',
-                description: 'The token paused successfully.',
-                type: 'success',
-                duration: 3000,
-            });
+
 
         } catch (error) {
             toaster.create({
@@ -39,7 +52,7 @@ export default function PauseTokenOperations() {
             bg="red.600"
             colorScheme="blue"
             onClick={handlePause}
-            loading={isPending}
+            loading={loading}
             loadingText="Pausing..."
             width="fit-content"
             _hover={{ bg: 'blue.500' }}

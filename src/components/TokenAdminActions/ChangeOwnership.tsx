@@ -1,15 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toaster } from "../ui/toaster";
 import { Box, Flex, Heading, Input } from "@chakra-ui/react";
 import { Button } from "../ui/button";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 
 export default function ChangeOwnership() {
 
     const [newOwner, setNewOwner] = useState<string>("");
 
-    const { writeContractAsync, isPending } = useWriteContract();
+    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+
+    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+        hash,
+    });
+
+    useEffect(() => {
+        if (isSuccess) {
+            toaster.create({
+                title: 'Success',
+                description: 'Successfully changed ownership.',
+                type: 'success',
+                duration: 2000,
+            });
+            setNewOwner("");
+        }
+    }, [isSuccess]);
+
+    const loading = isPending || isConfirming;
 
     const changeOwnerShip = async () => {
         try {
@@ -19,14 +37,6 @@ export default function ChangeOwnership() {
                 functionName: 'transferOwnership',
                 args: [newOwner],
             });
-
-            toaster.create({
-                title: 'Success',
-                description: 'Successfully changed ownership.',
-                type: 'success',
-                duration: 2000,
-            });
-
         } catch (error) {
             console.error(error);
             toaster.create({
@@ -56,7 +66,7 @@ export default function ChangeOwnership() {
                 bg="teal.500"
                 colorScheme="red"
                 onClick={changeOwnerShip}
-                loading={isPending}
+                loading={loading}
                 loadingText="Transferring.."
                 mt={4}
                 _hover={{ bg: "teal.400" }}

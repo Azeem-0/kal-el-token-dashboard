@@ -1,6 +1,7 @@
 import { formatUnits, parseUnits } from "viem";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import client from "@/lib/viemClient";
+import { readContract } from "viem/actions";
 
 export const useTokenOperations = () => {
 
@@ -8,7 +9,7 @@ export const useTokenOperations = () => {
         if (!address) return "";
 
         try {
-            const result: bigint = await client.readContract({
+            const result: bigint = await readContract(client, {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: 'balanceOf',
@@ -23,7 +24,7 @@ export const useTokenOperations = () => {
 
     const checkAllowance = async (owner: string, spender: string) => {
         try {
-            const result: bigint = await client.readContract({
+            const result: bigint = await readContract(client, {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: 'allowance',
@@ -38,7 +39,7 @@ export const useTokenOperations = () => {
 
     const getOwner = async () => {
         try {
-            const result: string = await client.readContract({
+            const result: string = await readContract(client, {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "getOwner",
@@ -54,7 +55,7 @@ export const useTokenOperations = () => {
 
     const getTokenName = async () => {
         try {
-            const result: string = await client.readContract({
+            const result: string = await readContract(client, {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "name",
@@ -69,7 +70,7 @@ export const useTokenOperations = () => {
 
     const getTotalSupply = async () => {
         try {
-            const result: bigint = await client.readContract({
+            const result: bigint = await readContract(client, {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "getTotalSupply",
@@ -84,7 +85,7 @@ export const useTokenOperations = () => {
 
     const getTokenSymbol = async () => {
         try {
-            const result: string = await client.readContract({
+            const result: string = await readContract(client, {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "symbol",
@@ -99,7 +100,7 @@ export const useTokenOperations = () => {
 
     const getTokenDecimals = async () => {
         try {
-            const result: string = await client.readContract({
+            const result: string = await readContract(client, {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "getDecimals",
@@ -114,12 +115,12 @@ export const useTokenOperations = () => {
 
     const getStatus = async () => {
         try {
-            const result: string = await client.readContract({
+            const result: boolean = await readContract(client, {
                 address: CONTRACT_ADDRESS,
                 abi: TOKEN_ABI,
                 functionName: "status",
                 args: []
-            }) as string;
+            }) as boolean;
 
             return result;
         } catch (error) {

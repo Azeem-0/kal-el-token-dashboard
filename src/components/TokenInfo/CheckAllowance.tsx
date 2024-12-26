@@ -3,6 +3,9 @@ import { Box, Flex, Input, Text, Spinner, Heading, Stack } from "@chakra-ui/reac
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { useTokenOperations } from "@/hooks/useTokenOperations";
+import { readContract } from "viem/actions";
+import client from "@/lib/viemClient";
+import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 
 
 const CheckAllowance = () => {
@@ -26,7 +29,16 @@ const CheckAllowance = () => {
         setLoading(true);
 
         try {
-            const result = await checkAllowance(owner, spender);
+            // const result = await checkAllowance(owner, spender);
+
+            const result: bigint = await readContract(client, {
+                address: CONTRACT_ADDRESS,
+                abi: TOKEN_ABI,
+                functionName: 'allowance',
+                args: [owner, spender],
+            }) as bigint;
+
+            console.log(result, owner, spender);
 
             setAmount(result.toString());
 

@@ -1,9 +1,9 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Input, Heading, Flex, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import { parseUnits } from "viem";
 
@@ -12,7 +12,27 @@ const TransferFromTokens = () => {
     const [toAddress, setToAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
 
-    const { isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+
+    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+        hash,
+    });
+
+    useEffect(() => {
+        if (isSuccess) {
+            toaster.create({
+                title: "Success",
+                description: "Successfully transfered tokens.",
+                type: "success",
+                duration: 2000,
+            });
+            setFromAddress("");
+            setToAddress("");
+            setAmount("");
+        }
+    }, [isSuccess]);
+
+    const loading = isPending || isConfirming;
 
     const transferFromTokens = async () => {
         if (fromAddress.trim() === "" || toAddress.trim() === "" || !amount) {
@@ -32,16 +52,8 @@ const TransferFromTokens = () => {
                 functionName: "transferFrom",
                 args: [fromAddress, toAddress, parseUnits(amount, DECIMALS)],
             });
-
-            toaster.create({
-                title: "Success",
-                description: "Successfully transfered tokens.",
-                type: "success",
-                duration: 2000,
-            });
         } catch (error) {
             console.error("Error transferring tokens:", error);
-
             toaster.create({
                 title: "Error",
                 description: "Failed to transfer tokens. Please try again.",
@@ -50,6 +62,7 @@ const TransferFromTokens = () => {
             });
         }
     };
+
 
     return (
         <Box
@@ -96,7 +109,7 @@ const TransferFromTokens = () => {
                 />
                 <Input
                     color="black"
-                    type="number"
+                    type="text"
                     placeholder="Enter amount"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
@@ -111,7 +124,7 @@ const TransferFromTokens = () => {
                     colorScheme="teal"
                     textAlign="center"
                     onClick={transferFromTokens}
-                    loading={isPending}
+                    loading={loading}
                     loadingText="Transferring..."
                     mt={4}
                     _hover={{ bg: "teal.400" }}

@@ -39,7 +39,7 @@ export default function TokenInformation() {
             const balance = await checkBalance(address);
             const totalSupply = await getTotalSupply();
             const owner = await getOwner();
-            const status = true; // will change once redeployed the contract.
+            const status = await getStatus();
             setTokenDetails({ name, symbol, decimals, balance, totalSupply, owner, status });
         } catch (error) {
             console.error("Error fetching token details:", error);

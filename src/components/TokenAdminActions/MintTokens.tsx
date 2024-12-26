@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Input, Heading, Flex, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import { parseUnits } from "viem";
 
@@ -11,7 +11,27 @@ const MintTokens = () => {
     const [toAddress, setToAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
 
-    const { isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+
+    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+        hash,
+    });
+
+    useEffect(() => {
+        if (isSuccess) {
+            toaster.create({
+                title: "Success",
+                description: `Successfully minted tokens.`,
+                type: "success",
+                duration: 3000,
+            });
+
+            setAmount("");
+            setToAddress("");
+        }
+    }, [isSuccess]);
+
+    const loading = isPending || isConfirming;
 
     const mintTokens = async () => {
         if (toAddress.trim() === "" || !amount) {
@@ -31,15 +51,7 @@ const MintTokens = () => {
                 functionName: "mint",
                 args: [toAddress, parseUnits(amount, DECIMALS)],
             });
-            toaster.create({
-                title: "Success",
-                description: `Successfully minted tokens.`,
-                type: "success",
-                duration: 3000,
-            });
 
-            setAmount("");
-            setToAddress("");
         } catch (error) {
             console.error("Error minting tokens:", error);
             toaster.create({
@@ -99,7 +111,7 @@ const MintTokens = () => {
                     bg="teal.500"
                     colorScheme="teal"
                     onClick={mintTokens}
-                    loading={isPending}
+                    loading={loading}
                     loadingText="Minting..."
                     mt={4}
                     _hover={{ bg: "teal.400" }}

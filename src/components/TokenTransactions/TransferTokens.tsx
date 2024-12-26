@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Input, Heading, Flex, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import { parseUnits } from "viem";
 
@@ -12,7 +12,26 @@ const TransferTokens = () => {
     const [amount, setAmount] = useState<string>("");
 
 
-    const { isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+
+    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+        hash,
+    });
+
+    useEffect(() => {
+        if (isSuccess) {
+            toaster.create({
+                title: "Success",
+                description: "Successfully transfered tokens.",
+                type: "success",
+                duration: 2000,
+            });
+            setToAddress("");
+            setAmount("");
+        }
+    }, [isSuccess]);
+
+    const loading = isPending || isConfirming;
 
     const transferTokens = async () => {
         if (toAddress.trim() === "" || !amount) {
@@ -24,7 +43,6 @@ const TransferTokens = () => {
             });
             return;
         }
-
         try {
             await writeContractAsync({
                 address: CONTRACT_ADDRESS,
@@ -32,14 +50,6 @@ const TransferTokens = () => {
                 functionName: "transfer",
                 args: [toAddress, parseUnits(amount, DECIMALS)],
             });
-
-            toaster.create({
-                title: "Success",
-                description: "Successfully transfered tokens.",
-                type: "success",
-                duration: 2000,
-            });
-
         } catch (error) {
             toaster.create({
                 title: "Error",
@@ -99,7 +109,7 @@ const TransferTokens = () => {
                     colorScheme="teal"
                     textAlign="center"
                     onClick={transferTokens}
-                    loading={isPending}
+                    loading={loading}
                     loadingText="Transferring..."
                     mt={4}
                     _hover={{ bg: "teal.400" }}

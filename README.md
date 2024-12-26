@@ -58,7 +58,7 @@ Ensure you have the following installed:
 
    ```env
    NEXT_PUBLIC_CONTRACT_ADDRESS=<Your Contract Address>
-   NEXT_PUBLIC_INFURA_API_KEY=<Your Infura API Key>
+   NEXT_PUBLIC_CONTRACT_OWNER_ADDRESS=<Owner address - if you deploy the contract your wallet address goes here.>
    ```
 
 5. Start the development server:

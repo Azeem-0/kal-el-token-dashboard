@@ -1,4 +1,4 @@
-export const DECIMALS = 18;
+export const DECIMALS = 8;
 export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS! as `0x${string}`;
 export const TOKEN_ABI = [
     {
@@ -228,13 +228,7 @@ export const TOKEN_ABI = [
             }
         ],
         "name": "approve",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -380,6 +374,19 @@ export const TOKEN_ABI = [
     {
         "inputs": [],
         "name": "paused",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "status",
         "outputs": [
             {
                 "internalType": "bool",

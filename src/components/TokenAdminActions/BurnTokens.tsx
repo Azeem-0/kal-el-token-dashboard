@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Input, Heading, Flex, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import { parseUnits } from "viem";
 
@@ -11,7 +11,26 @@ const BurnTokens = () => {
     const [fromAddress, setFromAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
 
-    const { isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+
+    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+        hash,
+    });
+
+    useEffect(() => {
+        if (isSuccess) {
+            toaster.create({
+                title: "Success",
+                description: "Successfully burned tokens",
+                type: "success",
+                duration: 2000,
+            });
+            setFromAddress("");
+            setAmount("");
+        }
+    }, [isSuccess]);
+
+    const loading = isPending || isConfirming;
 
     const burnTokens = async () => {
         if (fromAddress.trim() === "" || !amount) {
@@ -31,15 +50,6 @@ const BurnTokens = () => {
                 functionName: "burn",
                 args: [fromAddress, parseUnits(amount, DECIMALS)],
             });
-
-            toaster.create({
-                title: "Success",
-                description: "Successfully burned tokens",
-                type: "success",
-                duration: 2000,
-            });
-            setFromAddress("");
-            setAmount("");
         } catch (error) {
             console.error("Error burning tokens:", error);
             toaster.create({
@@ -99,7 +109,7 @@ const BurnTokens = () => {
                     bg="red.500"
                     colorScheme="red"
                     onClick={burnTokens}
-                    loading={isPending}
+                    loading={loading}
                     loadingText="Burning..."
                     mt={4}
                     _hover={{ bg: "red.400" }}

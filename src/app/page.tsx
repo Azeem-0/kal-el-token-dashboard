@@ -40,7 +40,7 @@ export default function Home() {
         <>
           {/* Token Info Section */}
 
-          <Box mt={12} px={6} py={8} bg="white" borderRadius="lg" boxShadow="md">
+          <Box mt={12} px={6} py={8} bg="white" borderRadius="lg">
             <h1 className="w-full text-center text-3xl text-black h-fit font-bold mb-2">
               <Highlight query="Contract." styles={{ color: "teal.700" }}>
                 Interact with Contract.
@@ -64,7 +64,7 @@ export default function Home() {
           </Box>
 
           {/* Token Transactions Section */}
-          <Box mt={12} px={6} py={8} bg="white" borderRadius="lg" boxShadow="md">
+          <Box mt={12} px={6} py={8} bg="white" borderRadius="lg">
             <Heading
               as="h1"
               textAlign="center"
@@ -95,7 +95,7 @@ export default function Home() {
           </Box>
 
           {/* Admin Operations Section */}
-          <Box mt={12} px={6} py={8} bg="white" borderRadius="lg" boxShadow="md">
+          <Box mt={12} px={6} py={8} bg="white" borderRadius="lg">
             <Heading
               as="h1"
               textAlign="center"

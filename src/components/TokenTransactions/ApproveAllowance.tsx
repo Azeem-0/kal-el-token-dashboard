@@ -1,9 +1,9 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Input, Heading, Flex, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import { parseUnits } from "viem";
 
@@ -12,7 +12,26 @@ const ApproveAllowance = () => {
     const [spender, setSpender] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
 
-    const { isPending, writeContractAsync } = useWriteContract();
+    const { data: hash, isPending, writeContractAsync } = useWriteContract();
+
+    const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+        hash,
+    });
+
+    useEffect(() => {
+        if (isSuccess) {
+            toaster.create({
+                title: "Success",
+                description: "Allowance approved",
+                type: "success",
+                duration: 2000,
+            });
+            setSpender("");
+            setAmount("");
+        }
+    }, [isSuccess]);
+
+    const loading = isPending || isConfirming;
 
     const approve = async () => {
         if (spender.trim() === "" || !amount) {
@@ -32,13 +51,6 @@ const ApproveAllowance = () => {
                 functionName: "approve",
                 args: [spender, parseUnits(amount, DECIMALS)],
             });
-
-            toaster.create({
-                title: "Success",
-                description: "Allowance approved",
-                type: "success",
-                duration: 2000,
-            });
         } catch (error) {
             console.error("Error approving allowance:", error);
             toaster.create({
@@ -49,6 +61,9 @@ const ApproveAllowance = () => {
             });
         }
     };
+
+
+
 
     return (
         <Box
@@ -98,7 +113,7 @@ const ApproveAllowance = () => {
                     bg="teal.500"
                     colorScheme="teal"
                     onClick={approve}
-                    loading={isPending}
+                    loading={loading}
                     loadingText="Approving..."
                     mt={4}
                     _hover={{ bg: "teal.400" }}
