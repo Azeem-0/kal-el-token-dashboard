@@ -91,3 +91,5 @@ Ensure you have the following installed:
 - **Pause/Unpause**: Toggle the paused state of the token contract.
 - **Transfer Ownership**: Assign ownership of the contract to a new address.
 
+notepoint : for demonstration and checking purpose - these owner only functions should be publicly accessible.
+

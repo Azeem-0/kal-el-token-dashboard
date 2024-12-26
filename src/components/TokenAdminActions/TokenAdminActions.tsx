@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
 import UnPauseTokenOperations from "./UnPauseTokenOperations";
 import PauseTokenOperations from "./PauseTokenOperations";
 import ChangeOwnership from "./ChangeOwnership";
@@ -32,6 +32,7 @@ export default function TokenAdminActions() {
             });
         }
         setIsOwner(false);
+        console.log(isOwner);
     }
 
     useEffect(() => {

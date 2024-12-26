@@ -1,5 +1,4 @@
 import { toaster } from "../ui/toaster";
-import { Box, Text } from "@chakra-ui/react";
 import { Button } from "../ui/button";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
@@ -30,7 +29,7 @@ export default function UnPauseTokenOperations() {
                 duration: 2000,
             });
         }
-    }, [isConfirmed]);
+    }, [isConfirmed, isError]);
 
     const loading = isPending || isConfirming;
 
@@ -44,6 +43,7 @@ export default function UnPauseTokenOperations() {
             });
 
         } catch (error) {
+            console.log(error);
             toaster.create({
                 title: 'Error',
                 description: 'Failed to unpause the token.',

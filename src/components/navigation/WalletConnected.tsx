@@ -9,7 +9,7 @@ import { InputGroup } from "@/components/ui/input-group";
 import { toaster } from "../ui/toaster";
 
 export default function WalletConnected() {
-    const { address, isConnected } = useAccount();
+    const { address } = useAccount();
     const { disconnect } = useDisconnect();
 
     const shortenAddress = (address: string) => {

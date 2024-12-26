@@ -1,11 +1,8 @@
 import { useState } from "react";
-import { Box, Flex, Input, Text, Spinner, Heading, Stack } from "@chakra-ui/react";
+import { Box, Input, Text, Heading, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { useTokenOperations } from "@/hooks/useTokenOperations";
-import { readContract } from "viem/actions";
-import client from "@/lib/viemClient";
-import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 
 
 const CheckAllowance = () => {

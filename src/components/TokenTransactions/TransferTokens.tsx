@@ -1,12 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Box, Input, Heading, Flex, Stack } from "@chakra-ui/react";
+import { Box, Input, Heading, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import { parseUnits } from "viem";
-import { trimErrorMessage } from "@/utils/trimErrorMessage";
 
 const TransferTokens = () => {
     const [toAddress, setToAddress] = useState<string>("");
@@ -68,6 +67,7 @@ const TransferTokens = () => {
                 args: [toAddress, parseUnits(amount, DECIMALS)],
             });
         } catch (error) {
+            console.log(error);
             toaster.create({
                 title: "Error",
                 description: "Failed to transfer tokens. Please try again.",

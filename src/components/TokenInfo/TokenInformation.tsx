@@ -1,7 +1,7 @@
 "use client";
 
 import { useTokenOperations } from "@/hooks/useTokenOperations";
-import { Box, Text, Heading, Flex, Stack, Spinner, Separator } from "@chakra-ui/react";
+import { Box, Text, Heading, Flex, Stack, Separator } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 
