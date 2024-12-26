@@ -39,45 +39,33 @@ export default function ChangeOwnership() {
     };
 
     return (
-        <Box
-            p={3}
-            borderWidth={1}
-            borderRadius="md"
-            boxShadow="md"
-            bg="white"
-            maxW="md"
-            mx="auto"
-            mt={3}
-            textAlign="center"
-        >
-            <Flex direction="column" gap={4}>
-                <Heading size="md" mb={4} color="gray.800">
-                    Change Ownership
-                </Heading>
-                <Input
-                    color="black"
-                    placeholder="Enter address"
-                    value={newOwner}
-                    onChange={(e) => setNewOwner(e.target.value)}
-                    bg="gray.100"
-                    borderColor="gray.300"
-                    _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
-                    _hover={{ borderColor: 'blue.400' }}
-                />
-                <Button
-                    bg="blue.600"
-                    colorScheme="blue"
-                    onClick={changeOwnerShip}
-                    loading={isPending}
-                    loadingText="Minting"
-                    mt={4}
-                    _hover={{ bg: 'blue.500' }}
-                    _active={{ bg: 'blue.700' }}
-                >
-                    Tranfer Ownership
-                </Button>
-            </Flex>
-        </Box>
+        <Flex direction="column" gap={4}>
+
+            <Input
+                color="black"
+                placeholder="Change ownership"
+                value={newOwner}
+                onChange={(e) => setNewOwner(e.target.value)}
+                bg="gray.100"
+                borderColor="gray.300"
+                pl="4"
+                _focus={{ borderColor: "teal.500", boxShadow: "0 0 0 1px #319795" }}
+                _hover={{ borderColor: "teal.400" }}
+            />
+            <Button
+                bg="teal.500"
+                colorScheme="red"
+                onClick={changeOwnerShip}
+                loading={isPending}
+                loadingText="Transferring.."
+                mt={4}
+                _hover={{ bg: "teal.400" }}
+                _active={{ bg: "teal.600" }}
+            >
+                Transfer Ownership
+            </Button>
+        </Flex>
     );
+
 
 }

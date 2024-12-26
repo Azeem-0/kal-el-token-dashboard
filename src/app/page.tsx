@@ -64,34 +64,67 @@ export default function Home() {
           </Box>
 
           {/* Token Transactions Section */}
-          <Box mt={12}>
-            <Heading fontSize="2xl" color="teal.600" mb={2}>
-              Token Transactions
+          <Box mt={12} px={6} py={8} bg="white" borderRadius="lg" boxShadow="md">
+            <Heading
+              as="h1"
+              textAlign="center"
+              fontSize="3xl"
+              fontWeight="bold"
+              color="black"
+              mb={2}
+            >
+              <Highlight query="Transactions" styles={{ color: "teal.700" }}>
+                Token Transactions
+              </Highlight>
             </Heading>
-            <Text fontSize="sm" color="gray.500" mb={4}>
+            <Text fontSize="sm" color="gray.500" mb={6} textAlign="center">
               Perform secure transfers and manage allowances.
             </Text>
-            <Flex wrap="wrap" gap={6}>
-              <TransferTokens />
+            <Flex
+              wrap="wrap"
+              justify="center"
+              align="start"
+              p={4}
+              bg="gray.50"
+              borderRadius="lg"
+            >
               <TransferFromTokens />
               <ApproveAllowance />
+              <TransferTokens />
             </Flex>
           </Box>
 
           {/* Admin Operations Section */}
-          <Box mt={12}>
-            <Heading fontSize="2xl" color="teal.600" mb={2}>
-              Admin Operations
+          <Box mt={12} px={6} py={8} bg="white" borderRadius="lg" boxShadow="md">
+            <Heading
+              as="h1"
+              textAlign="center"
+              fontSize="3xl"
+              fontWeight="bold"
+              color="black"
+              mb={2}
+            >
+              <Highlight query="Operations" styles={{ color: "teal.700" }}>
+                Admin Operations
+              </Highlight>
             </Heading>
-            <Text fontSize="sm" color="gray.500" mb={4}>
+            <Text fontSize="sm" color="gray.500" mb={6} textAlign="center">
               Manage token supply and perform admin-only actions.
             </Text>
-            <Flex wrap="wrap" gap={6}>
+            <Flex
+              wrap="wrap"
+              justify="center"
+              align="start"
+              p={4}
+              bg="gray.50"
+              borderRadius="lg"
+            >
+              <TokenAdminActions />
               <MintTokens />
               <BurnTokens />
-              <TokenAdminActions />
             </Flex>
           </Box>
+
         </>
       )}
     </Box>

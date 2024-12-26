@@ -34,37 +34,22 @@ export default function UnPauseTokenOperations() {
     };
 
     return (
-        <Box
-            p={3}
-            borderWidth={1}
+        <Button
+            bg="blue.600"
+            colorScheme="blue"
+            onClick={handleUnpause}
+            loading={isPending}
+            loadingText="Unpausing"
+            width="fit-content"
+            _hover={{ bg: 'blue.500' }}
+            _active={{ bg: 'blue.700' }}
             borderRadius="md"
-            boxShadow="md"
-            bg="white"
-            maxW="md"
-            mx="auto"
-            mt={2}
-            textAlign="center"
+            fontSize="md"
+            minW="5rem"
         >
-            <Text fontSize="lg" fontWeight="bold" color="gray.800" mb={2}>
-                Unpause Token
-            </Text>
-            <Button
-                bg="blue.600"
-                colorScheme="blue"
-                onClick={handleUnpause}
-                loading={isPending}
-                loadingText="Unpausing"
-                width="full"
-                _hover={{ bg: 'blue.500' }}
-                _active={{ bg: 'blue.700' }}
-                mt={2}
-                py={2}
-                borderRadius="md"
-                fontSize="md"
-            >
-                Unpause Token
-            </Button>
-        </Box>
+            Unpause
+        </Button>
     );
+
 
 }

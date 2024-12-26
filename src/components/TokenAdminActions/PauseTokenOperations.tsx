@@ -35,37 +35,20 @@ export default function PauseTokenOperations() {
     };
 
     return (
-        <Box
-            p={3}
-            borderWidth={1}
+        <Button
+            bg="red.600"
+            colorScheme="blue"
+            onClick={handlePause}
+            loading={isPending}
+            loadingText="Pausing..."
+            width="fit-content"
+            _hover={{ bg: 'blue.500' }}
+            _active={{ bg: 'blue.700' }}
             borderRadius="md"
-            boxShadow="md"
-            bg="white"
-            maxW="md"
-            mx="auto"
-            mt={3}
-            textAlign="center"
+            fontSize="md"
+            minW="5rem"
         >
-            <Text fontSize="lg" fontWeight="bold" color="gray.800" mb={2}>
-                Pause Token
-            </Text>
-            <Button
-                bg="red.600"
-                colorScheme="blue"
-                onClick={handlePause}
-                loading={isPending}
-                loadingText="Pausing"
-                width="full"
-                _hover={{ bg: 'blue.500' }}
-                _active={{ bg: 'blue.700' }}
-                mt={2}
-                py={3}
-                borderRadius="md"
-                fontSize="md"
-            >
-                Pause Token
-            </Button>
-        </Box>
+            Pause
+        </Button>
     );
-
 }

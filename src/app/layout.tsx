@@ -4,6 +4,7 @@ import WagmiProviderWrapper from "@/providers/WagmiProvider";
 import { Toaster } from "@/components/ui/toaster";
 import Navigation from "@/components/navigation/Navigation";
 import { Provider } from "@/components/ui/provider";
+import Footer from "@/components/footer/Footer";
 
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({
             <Navigation />
             <Toaster />
             {children}
+            <Footer />
           </Provider>
         </WagmiProviderWrapper>
       </body>

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Box, Input, Heading, Flex } from "@chakra-ui/react";
+import { Box, Input, Heading, Flex, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { useWriteContract } from "wagmi";
@@ -53,19 +53,25 @@ const BurnTokens = () => {
 
     return (
         <Box
-            p={6}
-            borderWidth={1}
-            borderRadius="md"
-            boxShadow="md"
-            bg="white"
+            p={8}
+            borderWidth={2}
+            borderRadius="lg"
+            boxShadow="sm"
+            bg="gray.50"
             maxW="md"
             mx="auto"
-            mt={6}
+            mt={8}
         >
-            <Heading size="md" mb={4} color="gray.800">
+            <Heading
+                fontSize="xl"
+                mb={4}
+                color="black"
+                fontWeight="semibold"
+                textAlign="center"
+            >
                 Burn Tokens
             </Heading>
-            <Flex direction="column" gap={4}>
+            <Stack gap={4}>
                 <Input
                     color="black"
                     placeholder="Enter from address"
@@ -73,8 +79,9 @@ const BurnTokens = () => {
                     onChange={(e) => setFromAddress(e.target.value)}
                     bg="gray.100"
                     borderColor="gray.300"
-                    _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
-                    _hover={{ borderColor: 'blue.400' }}
+                    pl="4"
+                    _focus={{ borderColor: "red.500", boxShadow: "0 0 0 1px #E53E3E" }}
+                    _hover={{ borderColor: "red.400" }}
                 />
                 <Input
                     color="black"
@@ -84,24 +91,26 @@ const BurnTokens = () => {
                     onChange={(e) => setAmount(e.target.value)}
                     bg="gray.100"
                     borderColor="gray.300"
-                    _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
-                    _hover={{ borderColor: 'blue.400' }}
+                    pl="4"
+                    _focus={{ borderColor: "red.500", boxShadow: "0 0 0 1px #E53E3E" }}
+                    _hover={{ borderColor: "red.400" }}
                 />
                 <Button
-                    bg="red.600"
+                    bg="red.500"
                     colorScheme="red"
                     onClick={burnTokens}
                     loading={isPending}
-                    loadingText="Burning"
+                    loadingText="Burning..."
                     mt={4}
-                    _hover={{ bg: 'red.500' }}
-                    _active={{ bg: 'red.700' }}
+                    _hover={{ bg: "red.400" }}
+                    _active={{ bg: "red.600" }}
                 >
                     Burn Tokens
                 </Button>
-            </Flex>
+            </Stack>
         </Box>
     );
+
 
 };
 

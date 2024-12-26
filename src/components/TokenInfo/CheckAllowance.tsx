@@ -55,6 +55,7 @@ const CheckAllowance = () => {
             boxShadow="sm"
             bg="gray.50"
             mx="auto"
+            mt={8}
         >
             <Heading fontSize="xl" mb={4} color="black" fontWeight="semibold" textAlign="center">
                 Check Allowance

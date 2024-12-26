@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import UnPauseTokenOperations from "./UnPauseTokenOperations";
 import PauseTokenOperations from "./PauseTokenOperations";
 import ChangeOwnership from "./ChangeOwnership";
@@ -40,24 +40,35 @@ export default function TokenAdminActions() {
 
 
     return (
-        <Flex
-            direction="row"
-            width="full"
-            gap="3"
-            align="center"
-            justify="center"
-            p={4}
-            style={{
-                filter: isOwner ? "none" : "blur(0.5px)",
-                pointerEvents: isOwner ? "auto" : "none",
-                opacity: isOwner ? "1" : "0.8",
-            }}
+        <Box
+            p={8}
+            borderWidth={2}
+            borderRadius="lg"
+            boxShadow="sm"
+            bg="gray.50"
+            maxW="md"
+            mx="auto"
+            mt={8}
         >
-            <PauseTokenOperations />
-            <UnPauseTokenOperations />
-            <ChangeOwnership />
-        </Flex>
-    );
+            <Heading
+                fontSize="xl"
+                mb={4}
+                color="black"
+                fontWeight="semibold"
+                textAlign="center"
+            >
+                Admin Operations
+            </Heading>
 
+            <Stack gap={4}>
+                <ChangeOwnership />
+                <Flex flexDirection="row" gap={4} justify="space-between" width="full">
+                    <PauseTokenOperations />
+                    <UnPauseTokenOperations />
+                </Flex>
+
+            </Stack>
+        </Box>
+    );
 
 };

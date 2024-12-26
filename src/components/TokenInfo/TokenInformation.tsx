@@ -52,24 +52,6 @@ export default function TokenInformation() {
         fetchTokenDetails();
     }, []);
 
-    if (loading) {
-        return (
-            <Flex align="center" justify="center" minHeight="200px">
-                <Spinner size="lg" color="teal.500" />
-            </Flex>
-        );
-    }
-
-    if (!tokenDetails) {
-        return (
-            <Box textAlign="center" p={6}>
-                <Text fontSize="md" color="red.500">
-                    Failed to fetch token details. Please try again later.
-                </Text>
-            </Box>
-        );
-    }
-
     return (
         <Box
             p={8}
@@ -80,61 +62,68 @@ export default function TokenInformation() {
             maxW="4xl"
             minW="md"
             mx="auto"
+            mt={8}
         >
             <Heading fontSize="xl" mb={4} color="black" fontWeight="semibold" textAlign="center">
                 Token Information
             </Heading>
 
-            {tokenDetails ? <Stack gap={3} separator={<Separator borderColor="gray.300" />}>
-                <Flex justify="space-between">
-                    <Text fontSize="md" fontWeight="semibold" color="gray.700">
-                        Name:
+            {
+                loading ? <Flex align="center" justify="center" minHeight="200px">
+                    <Text fontSize="md" fontWeight="semibold" color="teal.700">
+                        Loading...
                     </Text>
-                    <Text color="gray.600">{tokenDetails.name}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                    <Text fontSize="md" fontWeight="semibold" color="gray.700">
-                        Symbol:
-                    </Text>
-                    <Text color="gray.600">{tokenDetails.symbol}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                    <Text fontSize="md" fontWeight="semibold" color="gray.700">
-                        Decimals:
-                    </Text>
-                    <Text color="gray.600">{tokenDetails.decimals}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                    <Text fontSize="md" fontWeight="semibold" color="gray.700">
-                        Your Balance:
-                    </Text>
-                    <Text color="gray.600">{tokenDetails.balance}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                    <Text fontSize="md" fontWeight="semibold" color="gray.700">
-                        Total Supply:
-                    </Text>
-                    <Text color="gray.600">{tokenDetails.totalSupply}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                    <Text fontSize="md" fontWeight="semibold" color="gray.700">
-                        Owner:
-                    </Text>
-                    <Text letterSpacing="wider" color="gray.600">{tokenDetails.owner.slice(0, 8)}.....{tokenDetails.owner.slice(-7)}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                    <Text fontSize="md" fontWeight="semibold" color="gray.700">
-                        Status:
-                    </Text>
-                    <Text color={tokenDetails.status ? "green.600" : "red.600"}>
-                        {tokenDetails.status ? "Active" : "Inactive"}
-                    </Text>
-                </Flex>
-            </Stack> : <Box textAlign="center" p={6}>
-                <Text fontSize="md" color="red.500">
-                    Failed to fetch token details. Please try again later.
-                </Text>
-            </Box>
+                </Flex> :
+                    tokenDetails ? <Stack gap={3} separator={<Separator borderColor="gray.300" />}>
+                        <Flex justify="space-between">
+                            <Text fontSize="md" fontWeight="semibold" color="gray.700">
+                                Name:
+                            </Text>
+                            <Text color="gray.600">{tokenDetails.name}</Text>
+                        </Flex>
+                        <Flex justify="space-between">
+                            <Text fontSize="md" fontWeight="semibold" color="gray.700">
+                                Symbol:
+                            </Text>
+                            <Text color="gray.600">{tokenDetails.symbol}</Text>
+                        </Flex>
+                        <Flex justify="space-between">
+                            <Text fontSize="md" fontWeight="semibold" color="gray.700">
+                                Decimals:
+                            </Text>
+                            <Text color="gray.600">{tokenDetails.decimals}</Text>
+                        </Flex>
+                        <Flex justify="space-between">
+                            <Text fontSize="md" fontWeight="semibold" color="gray.700">
+                                Your Balance:
+                            </Text>
+                            <Text color="gray.600">{tokenDetails.balance}</Text>
+                        </Flex>
+                        <Flex justify="space-between">
+                            <Text fontSize="md" fontWeight="semibold" color="gray.700">
+                                Total Supply:
+                            </Text>
+                            <Text color="gray.600">{tokenDetails.totalSupply}</Text>
+                        </Flex>
+                        <Flex justify="space-between">
+                            <Text fontSize="md" fontWeight="semibold" color="gray.700">
+                                Owner:
+                            </Text>
+                            <Text letterSpacing="wider" color="gray.600">{tokenDetails.owner.slice(0, 8)}.....{tokenDetails.owner.slice(-7)}</Text>
+                        </Flex>
+                        <Flex justify="space-between">
+                            <Text fontSize="md" fontWeight="semibold" color="gray.700">
+                                Status:
+                            </Text>
+                            <Text color={tokenDetails.status ? "green.600" : "red.600"}>
+                                {tokenDetails.status ? "Active" : "Inactive"}
+                            </Text>
+                        </Flex>
+                    </Stack> : <Box textAlign="center" p={6}>
+                        <Text fontSize="md" color="red.500">
+                            Failed to fetch token details. Please try again later.
+                        </Text>
+                    </Box>
             }
         </Box>
     );
