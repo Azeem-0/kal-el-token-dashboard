@@ -1,13 +1,13 @@
 "use client";
 
 import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
-import UnPauseTokenOperations from "./UnPauseTokenOperations";
-import PauseTokenOperations from "./PauseTokenOperations";
 import ChangeOwnership from "./ChangeOwnership";
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import { useTokenOperations } from "@/hooks/useTokenOperations";
 import { toaster } from "../ui/toaster";
+import PauseTokenOperations from "./PauseTokenOperations";
+import UnPauseTokenOperations from "./UnPauseTokenOperations";
 
 export default function TokenAdminActions() {
     const { isConnected, address } = useAccount();
@@ -67,7 +67,6 @@ export default function TokenAdminActions() {
                     <PauseTokenOperations />
                     <UnPauseTokenOperations />
                 </Flex>
-
             </Stack>
         </Box>
     );

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toaster } from "../ui/toaster";
 import { Flex, Input } from "@chakra-ui/react";
 import { Button } from "../ui/button";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { BaseError, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 
 export default function ChangeOwnership() {
@@ -11,31 +11,10 @@ export default function ChangeOwnership() {
 
     const { data: hash, isPending, writeContract, isError, error } = useWriteContract();
 
-    const { isLoading: isConfirming, isSuccess: ifConfirmed } = useWaitForTransactionReceipt({
+    const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
         hash,
     });
 
-    useEffect(() => {
-        if (isError) {
-            toaster.create({
-                title: "Error",
-                description: `${error?.cause}`,
-                type: "error",
-                duration: 2000,
-            });
-        }
-        if (ifConfirmed) {
-            toaster.create({
-                title: 'Success',
-                description: 'Successfully changed ownership.',
-                type: 'success',
-                duration: 2000,
-            });
-            setNewOwner("");
-        }
-    }, [ifConfirmed, isError]);
-
-    const loading = isPending || isConfirming;
 
     const changeOwnerShip = async () => {
         try {
@@ -74,7 +53,7 @@ export default function ChangeOwnership() {
                 bg="teal.500"
                 colorScheme="red"
                 onClick={changeOwnerShip}
-                loading={loading}
+                loading={isPending}
                 loadingText="Transferring.."
                 mt={4}
                 _hover={{ bg: "teal.400" }}
@@ -82,6 +61,22 @@ export default function ChangeOwnership() {
             >
                 Transfer Ownership
             </Button>
+
+            {isConfirming && (
+                <div className=" text-black w-full text-center text-sm">
+                    Waiting...
+                </div>
+            )}
+            {isConfirmed && (
+                <div className="text-sm w-full text-center text-green-600">
+                    Success
+                </div>
+            )}
+            {isError && (
+                <div className="text-sm w-full text-center text-red-600">
+                    Error
+                </div>
+            )}
         </Flex>
     );
 

@@ -39,12 +39,13 @@ const ConnectionDrawer = () => {
             <DrawerTrigger asChild>
                 <Button
                     _hover={{
-                        bg: "#D6D6DB",
+                        bg: "teal.600",
                     }}
                     onClick={() => {
                         setIsDrawerOpen(true);
                     }}
-                    className="bg-[#E7E7E7] font-semibold rounded-full"
+                    bg="teal.500"
+                    fontWeight="semibold"
                     colorScheme="teal"
                     size="sm"
                     variant="outline"
@@ -52,7 +53,7 @@ const ConnectionDrawer = () => {
                     padding='2'
                     height="fit-content"
                     paddingX="8"
-                    color="black"
+                    color="white"
                 >
                     Connect
                 </Button>
@@ -125,7 +126,6 @@ function ConnectButton({
             </Text>
             <Spacer />
             <Button
-                borderRadius="md"
                 disabled={!ready}
                 onClick={onClick}
                 key={connector.uid}

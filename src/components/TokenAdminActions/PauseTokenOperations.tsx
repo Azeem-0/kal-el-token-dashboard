@@ -1,8 +1,9 @@
 import { toaster } from "../ui/toaster";
 import { Button } from "../ui/button";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { BaseError, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 import { useEffect } from "react";
+import { Stack } from "@chakra-ui/react";
 
 export default function PauseTokenOperations() {
 
@@ -11,27 +12,6 @@ export default function PauseTokenOperations() {
     const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
         hash,
     });
-
-    useEffect(() => {
-        if (isError) {
-            toaster.create({
-                title: "Error",
-                description: `${error?.cause}`,
-                type: "error",
-                duration: 2000,
-            });
-        }
-        if (isConfirmed) {
-            toaster.create({
-                title: 'Success',
-                description: 'The token paused successfully.',
-                type: 'success',
-                duration: 3000,
-            });
-        }
-    }, [isConfirmed, isError]);
-
-    const loading = isPending || isConfirming;
 
     const handlePause = async () => {
         try {
@@ -56,20 +36,37 @@ export default function PauseTokenOperations() {
     };
 
     return (
-        <Button
-            bg="red.600"
-            colorScheme="blue"
-            onClick={handlePause}
-            loading={loading}
-            loadingText="Pausing..."
-            width="fit-content"
-            _hover={{ bg: 'blue.500' }}
-            _active={{ bg: 'blue.700' }}
-            borderRadius="md"
-            fontSize="md"
-            minW="5rem"
-        >
-            Pause
-        </Button>
+        <Stack gap={1}>
+            <Button
+                bg="red.600"
+                colorScheme="blue"
+                onClick={handlePause}
+                loading={isPending}
+                loadingText="Pausing..."
+                width="fit-content"
+                _hover={{ bg: 'blue.500' }}
+                _active={{ bg: 'blue.700' }}
+                borderRadius="md"
+                fontSize="md"
+                minW="5rem"
+            >
+                Pause
+            </Button>
+            {isConfirming && (
+                <div className=" text-black w-full text-center text-sm">
+                    Waiting...
+                </div>
+            )}
+            {isConfirmed && (
+                <div className="text-sm w-full text-center text-green-600">
+                    Paused
+                </div>
+            )}
+            {isError && (
+                <div className="text-sm w-full text-center text-red-600">
+                    Error
+                </div>
+            )}
+        </Stack>
     );
 }

@@ -11,10 +11,40 @@ import { Box, Flex, Heading, Highlight, Stack, Text } from "@chakra-ui/react";
 import TokenAdminActions from "@/components/TokenAdminActions/TokenAdminActions";
 import CheckBalance from "@/components/TokenInfo/CheckBalance";
 import TokenInformation from "@/components/TokenInfo/TokenInformation";
+import { useTokenOperations } from "@/hooks/useTokenOperations";
+import { useEffect, useState } from "react";
+import { toaster } from "@/components/ui/toaster";
 
 export default function Home() {
 
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
+
+  const [isOwner, setIsOwner] = useState<boolean>(false);
+
+  const { getOwner } = useTokenOperations();
+
+  const checkTokenOwner = async () => {
+    try {
+      const result = await getOwner();
+      if (address === result) {
+        setIsOwner(true);
+        return;
+      }
+    } catch (error) {
+      console.error("Error fetching allowance:", error);
+      toaster.create({
+        title: "Error",
+        description: "Failed to fetch allowance. Please try again.",
+        type: "error",
+      });
+    }
+    setIsOwner(false);
+  }
+
+  useEffect(() => {
+    checkTokenOwner();
+  }, [isConnected]);
+
 
   return (
     <Box height="100%" minHeight="100dvh" p={6} bg="gray.50">
@@ -89,8 +119,8 @@ export default function Home() {
               borderRadius="lg"
             >
               <TransferFromTokens />
-              <ApproveAllowance />
               <TransferTokens />
+              <ApproveAllowance />
             </Flex>
           </Box>
 
@@ -118,6 +148,11 @@ export default function Home() {
               p={4}
               bg="gray.50"
               borderRadius="lg"
+              style={{
+                filter: isOwner ? "none" : "blur(0.5px)",
+                pointerEvents: isOwner ? "auto" : "none",
+                opacity: isOwner ? "1" : "0.6",
+              }}
             >
               <TokenAdminActions />
               <MintTokens />

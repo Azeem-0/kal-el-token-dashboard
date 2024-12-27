@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Box, Input, Heading, Stack } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { BaseError, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, DECIMALS, TOKEN_ABI } from "@/constants";
 import { parseUnits } from "viem";
 
@@ -17,36 +17,6 @@ const ApproveAllowance = () => {
     const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
         hash,
     });
-
-    useEffect(() => {
-
-        if (isError) {
-            toaster.create({
-                title: "Error",
-                description: `${error?.cause}`,
-                type: "error",
-                duration: 2000,
-            });
-        }
-
-        if (isConfirmed) {
-            toaster.create({
-                title: "Success",
-                description: "Allowance approved",
-                type: "success",
-                duration: 2000,
-            });
-
-            setTimeout(() => {
-                setSpender("");
-                setAmount("");
-            }, 1000);
-        }
-
-
-    }, [isConfirmed, isError]);
-
-    const loading = isPending || isConfirming;
 
     const approve = async () => {
         if (spender.trim() === "" || !amount) {
@@ -128,7 +98,7 @@ const ApproveAllowance = () => {
                     bg="teal.500"
                     colorScheme="teal"
                     onClick={approve}
-                    loading={loading}
+                    loading={isPending}
                     loadingText="Approving..."
                     mt={4}
                     _hover={{ bg: "teal.400" }}
@@ -136,6 +106,25 @@ const ApproveAllowance = () => {
                 >
                     Approve Allowance
                 </Button>
+                {hash && (
+                    <div className="text-black w-full text-xs">Transaction Hash: {hash.slice(0, 7)}...{hash.slice(-7)}</div>
+                )}
+                {isConfirming && (
+                    <div className=" text-black w-full text-center text-sm">
+                        Waiting for confirmation...
+                    </div>
+                )}
+                {isConfirmed && (
+                    <div className="text-sm w-full text-center text-green-600">
+                        Transaction confirmed.
+                    </div>
+                )}
+                {isError && (
+                    <div className="text-sm w-full text-center text-red-600">
+                        Error:{" "}
+                        {(error as BaseError).shortMessage || error.message}
+                    </div>
+                )}
             </Stack>
         </Box>
     );

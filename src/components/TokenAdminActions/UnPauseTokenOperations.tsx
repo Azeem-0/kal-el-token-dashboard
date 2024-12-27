@@ -1,8 +1,9 @@
 import { toaster } from "../ui/toaster";
 import { Button } from "../ui/button";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { BaseError, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, TOKEN_ABI } from "@/constants";
 import { useEffect } from "react";
+import { Stack } from "@chakra-ui/react";
 
 export default function UnPauseTokenOperations() {
 
@@ -54,21 +55,38 @@ export default function UnPauseTokenOperations() {
     };
 
     return (
-        <Button
-            bg="blue.600"
-            colorScheme="blue"
-            onClick={handleUnpause}
-            loading={loading}
-            loadingText="Unpausing"
-            width="fit-content"
-            _hover={{ bg: 'blue.500' }}
-            _active={{ bg: 'blue.700' }}
-            borderRadius="md"
-            fontSize="md"
-            minW="5rem"
-        >
-            Unpause
-        </Button>
+        <Stack gap={1}>
+            <Button
+                bg="blue.600"
+                colorScheme="blue"
+                onClick={handleUnpause}
+                loading={loading}
+                loadingText="Unpausing"
+                width="fit-content"
+                _hover={{ bg: 'blue.500' }}
+                _active={{ bg: 'blue.700' }}
+                borderRadius="md"
+                fontSize="md"
+                minW="5rem"
+            >
+                Unpause
+            </Button>
+            {isConfirming && (
+                <div className=" text-black w-full text-center text-sm">
+                    Waiting...
+                </div>
+            )}
+            {isConfirmed && (
+                <div className="text-sm w-full text-center text-green-600">
+                    Unpaused
+                </div>
+            )}
+            {isError && (
+                <div className="text-sm w-full text-center text-red-600">
+                    Error
+                </div>
+            )}
+        </Stack>
     );
 
 
