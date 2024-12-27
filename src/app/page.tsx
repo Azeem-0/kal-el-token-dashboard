@@ -1,16 +1,16 @@
 "use client";
 
-import ApproveAllowance from "@/components/tokenTransactions/ApproveAllowance";
-import BurnTokens from "@/components/tokenAdminActions/BurnTokens";
-import CheckAllowance from "@/components/tokenInfo/CheckAllowance";
-import MintTokens from "@/components/tokenAdminActions/MintTokens";
-import TransferFromTokens from "@/components/tokenTransactions/TransferFromTokens";
-import TransferTokens from "@/components/tokenTransactions/TransferTokens";
+import ApproveAllowance from "@/components/TokenTransactions/ApproveAllowance";
+import BurnTokens from "@/components/TokenAdminActions/BurnTokens";
+import CheckAllowance from "@/components/TokenInfo/CheckAllowance";
+import MintTokens from "@/components/TokenAdminActions/MintTokens";
+import TransferFromTokens from "@/components/TokenTransactions/TransferFromTokens";
+import TransferTokens from "@/components/TokenTransactions/TransferTokens";
 import { useAccount } from "wagmi";
 import { Box, Flex, Heading, Highlight, Stack, Text } from "@chakra-ui/react";
-import TokenAdminActions from "@/components/tokenAdminActions/TokenAdminActions";
-import CheckBalance from "@/components/tokenInfo/CheckBalance";
-import TokenInformation from "@/components/tokenInfo/TokenInformation";
+import TokenAdminActions from "@/components/TokenAdminActions/TokenAdminActions";
+import CheckBalance from "@/components/TokenInfo/CheckBalance";
+import TokenInformation from "@/components/TokenInfo/TokenInformation";
 
 export default function Home() {
 
