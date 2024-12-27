@@ -1,25 +1,17 @@
 import type { NextConfig } from "next";
 
+const path = require('path');
+
 const nextConfig: NextConfig = {
   /* config options here */
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/',
-        permanent: true,
-      },
-    ]
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, './'),
+    };
+
+    return config;
   },
-  async rewrites() {
-    return [
-      {
-        source: '/',
-        destination: '/',
-      },
-    ]
-  },
-  basePath: '/',
 };
 
 export default nextConfig;
