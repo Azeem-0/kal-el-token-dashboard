@@ -37,13 +37,13 @@ Ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Azeem-0/kal-el-token-wallet-integration.git
+   git clone https://github.com/Azeem-0/kal-el-token-dashboard.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd kal-el-token-wallet-integration
+   cd kal-el-token-dashboard
    ```
 
 3. Install dependencies:
@@ -57,8 +57,7 @@ Ensure you have the following installed:
    Create a `.env.local` file in the root directory and add the following:
 
    ```env
-   NEXT_PUBLIC_CONTRACT_ADDRESS=<Your Contract Address>
-   NEXT_PUBLIC_CONTRACT_OWNER_ADDRESS=<Owner address - if you deploy the contract your wallet address goes here.>
+   NEXT_PUBLIC_CONTRACT_ADDRESS=<Your Contract Address> - Use the address of your deployed contract or any existing ERC20 contract address
    ```
 
 5. Start the development server:
