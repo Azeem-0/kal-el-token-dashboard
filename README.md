@@ -90,3 +90,7 @@ Ensure you have the following installed:
 - **Pause/Unpause**: Toggle the paused state of the token contract.
 - **Transfer Ownership**: Assign ownership of the contract to a new address.
 
+## Security Considerations
+- **Owner-Only Functions** : The functions that are intended to be restricted to the owner (such as minting, burning, pausing, and transferring ownership) are made public in this contract for testing purposes only. In a production environment, these functions should be restricted to the owner using modifiers like onlyOwner to prevent unauthorized access.
+
+

@@ -148,11 +148,11 @@ export default function Home() {
               p={4}
               bg="gray.50"
               borderRadius="lg"
-              style={{
-                filter: isOwner ? "none" : "blur(0.5px)",
-                pointerEvents: isOwner ? "auto" : "none",
-                opacity: isOwner ? "1" : "0.6",
-              }}
+            // style={{
+            //   filter: isOwner ? "none" : "blur(0.5px)",
+            //   pointerEvents: isOwner ? "auto" : "none",
+            //   opacity: isOwner ? "1" : "0.6",
+            // }}
             >
               <TokenAdminActions />
               <MintTokens />

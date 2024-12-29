@@ -59,7 +59,7 @@ export default function WalletConnected() {
                 px={5}
                 py={2}
             >
-                Disconnected
+                Disconnect
             </Button>
         </Flex>
     );
